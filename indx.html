@@ -17,7 +17,7 @@
       --primary: #7B8C68;
       --primary-dark: #5A6A4B;
       --accent: #C5A065;
-      --glass: rgba(255, 255, 255, 0.95); /* زيادة التعتيم قليلاً للوضوح */
+      --glass: rgba(255, 255, 255, 0.95);
       --shadow-phone: 0 40px 80px rgba(0,0,0,0.15), 0 10px 20px rgba(0,0,0,0.05);
     }
 
@@ -30,7 +30,6 @@
     html { scroll-behavior: smooth; }
     body { background-color: var(--bg-main); color: var(--text-main); font-family: 'Tajawal', sans-serif; overflow-x: hidden; }
 
-    /* Noise & Cursor */
     .noise { position: fixed; inset: 0; background: url('https://grainy-gradients.vercel.app/noise.svg'); opacity: 0.04; pointer-events: none; z-index: 9999; }
     
     .cursor { 
@@ -50,6 +49,84 @@
     .nav-logo-img { height: 45px; width: auto; }
     .nav-btn { padding: 0.8rem 2rem; background: var(--text-main); color: white; border-radius: 50px; font-weight: 700; text-decoration: none; transition: 0.3s; }
     .nav-btn:hover { background: var(--primary); transform: translateY(-3px); }
+
+    /* ===== COMING SOON BADGE ===== */
+    .coming-soon-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.05s forwards;
+    }
+
+    .coming-soon-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.55rem 1.4rem;
+      background: linear-gradient(135deg, rgba(197,160,101,0.12), rgba(197,160,101,0.06));
+      border: 1.5px solid rgba(197,160,101,0.45);
+      border-radius: 50px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* shimmer sweep */
+    .coming-soon-badge::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,0.55) 50%, transparent 70%);
+      transform: translateX(-120%);
+      animation: shimmer 2.8s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%   { transform: translateX(-120%); }
+      60%  { transform: translateX(120%); }
+      100% { transform: translateX(120%); }
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+      box-shadow: 0 0 0 0 rgba(197,160,101,0.6);
+      animation: pulse-dot 2s ease-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%   { box-shadow: 0 0 0 0 rgba(197,160,101,0.6); }
+      70%  { box-shadow: 0 0 0 8px rgba(197,160,101,0); }
+      100% { box-shadow: 0 0 0 0 rgba(197,160,101,0); }
+    }
+
+    .badge-text {
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #9A7040;
+      position: relative;
+    }
+
+    .badge-sep {
+      width: 1px;
+      height: 18px;
+      background: rgba(197,160,101,0.3);
+    }
+
+    .badge-label {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+    /* ============================= */
 
     /* Hero */
     .hero { padding: 9rem 2rem 4rem; text-align: center; min-height: 100vh; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; }
@@ -141,7 +218,7 @@
 
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
-    /* --- تحسينات الجوال (Mobile Fixed) --- */
+    /* Mobile */
     @media (max-width: 1024px) {
       nav { padding: 0.8rem 1.5rem; }
       .nav-btn { padding: 0.6rem 1.2rem; font-size: 0.85rem; }
@@ -149,6 +226,10 @@
       .hero { padding: 8rem 1.5rem 3rem; }
       .hero-main-logo { height: 80px; }
       .hero h1 { font-size: 2.5rem; }
+
+      .coming-soon-bar { gap: 0.6rem; }
+      .badge-label { display: none; }
+      .badge-sep { display: none; }
       
       .philo-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
       .philosophy { padding: 3rem 1.5rem; margin: 2rem auto; }
@@ -156,37 +237,32 @@
       .walkthrough { padding: 2rem 1.5rem; }
       .feature-row, .feature-row.reversed { flex-direction: column; text-align: center; gap: 3rem; margin-bottom: 6rem; }
       
-      /* تعديل هام: ترتيب العناصر في الجوال */
-      /* نجعل الحاوية عمودية */
       .feature-visual, .hero-showcase {
         display: flex;
-        flex-direction: column; /* الجوال أولاً، التسمية تحته */
+        flex-direction: column;
         align-items: center;
         gap: 1.5rem;
       }
 
-      /* الجوال: ثابت وبدون دوران */
       .phone-frame, .phone-frame-feat { 
         width: 260px; height: 520px; 
         transform: none !important; 
-        order: 1; /* الجوال يظهر أولاً */
+        order: 1;
         margin: 0 auto;
       }
       
-      /* البطاقة العائمة: تصبح ثابتة تحت الجوال */
       .ui-tag { 
-        position: static !important; /* إلغاء التموضع الحر */
+        position: static !important;
         display: inline-flex;
         transform: none !important;
-        animation: none !important; /* إلغاء الحركة */
+        animation: none !important;
         margin: 0;
-        order: 2; /* التسمية تظهر ثانياً (تحت الجوال) */
+        order: 2;
         width: auto;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* ظل خفيف */
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         border: 1px solid rgba(0,0,0,0.05);
       }
       
-      /* إلغاء الستايلات المضمنة للبطاقات في الجوال */
       .hero-showcase .ui-tag, 
       .feature-visual .ui-tag {
         top: auto !important;
@@ -211,6 +287,16 @@
 
   <section class="hero">
     <img src="logo.png" alt="Logo" class="hero-main-logo" onerror="this.style.display='none'">
+
+    <!-- ✦ Coming Soon Badge -->
+    <div class="coming-soon-bar">
+      <div class="coming-soon-badge">
+        <span class="badge-dot"></span>
+        <span class="badge-text">قريبًا</span>
+      </div>
+      <span class="badge-sep"></span>
+      <span class="badge-label">التطبيق في قيد التطوير </span>
+    </div>
     
     <h1>حولنا الخزانة من جماد..<br>إلى مساعد <span style="color:var(--accent); position:relative; display:inline-block;">ذكي<svg style="position:absolute; bottom:-10px; left:0; width:100%; height:10px; fill:none; stroke:var(--accent); stroke-width:3;" viewBox="0 0 100 10"><path d="M0 5 Q 50 10 100 5"></path></svg></span></h1>
     <p>دِثار هو 'العقل' الذكي لخزانتك. تقنية تستشعر وجود كل قطعة تملكها، وتتولى عنك مهمة التنظيم والتنسيق بالكامل.</p>
@@ -219,7 +305,7 @@
       <div class="ui-tag" style="top: 20%; right: -40px;"><div class="ui-icon">📱</div> <span>واجهة تفاعلية</span></div>
       <div class="hero-phone">
         <div class="phone-notch"></div>
-        <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-08 at 02.25.35.png" class="phone-screen" alt="App">
+        <img src="firstScreen.png" class="phone-screen" alt="App">
       </div>
     </div>
   </section>
@@ -237,16 +323,16 @@
 
     <div class="philo-grid">
       <div class="philo-item">
-        <img src="logo1.PNG" alt="1" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=1'">
+        <img src="d.png" alt="1" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=1'">
       </div>
       <div class="philo-item">
-        <img src="logo2.PNG" alt="2" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=2'">
+        <img src="th.png" alt="2" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=2'">
       </div>
       <div class="philo-item">
-        <img src="logo3.PNG" alt="3" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=3'">
+        <img src="a.png" alt="3" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=3'">
       </div>
       <div class="philo-item">
-        <img src="logo4.PNG" alt="4" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=4'">
+        <img src="r.png" alt="4" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=4'">
       </div>
     </div>
   </section>
@@ -263,7 +349,7 @@
         <div class="ui-tag" style="top:15%; right:-20px;"><div class="ui-icon">📁</div> <span>تصنيف ذكي</span></div>
         <div class="phone-frame-feat">
            <div class="phone-notch"></div>
-           <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-08 at 02.16.42.png" class="phone-screen" alt="Organized">
+           <img src="showCategory.png" class="phone-screen" alt="Organized">
         </div>
       </div>
     </div>
@@ -279,7 +365,7 @@
         
         <div class="phone-frame-feat">
           <div class="phone-notch"></div>
-          <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-08 at 12.00.27.png" class="phone-screen" alt="Tracking Screen">
+          <img src="Wradrobe.png" class="phone-screen" alt="Tracking Screen">
         </div>
       </div>
     </div>
@@ -294,7 +380,7 @@
         <div class="ui-tag" style="bottom:20%; right:-20px;"><div class="ui-icon">🔊</div> <span>وصف صوتي</span></div>
         <div class="phone-frame-feat">
           <div class="phone-notch"></div>
-          <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-08 at 12.00.35.png" class="phone-screen" alt="Accessibility">
+          <img src="Audio.png" class="phone-screen" alt="Accessibility">
         </div>
       </div>
     </div>
@@ -309,7 +395,7 @@
         <div class="ui-tag" style="top:15%; left:-10px;"><div class="ui-icon">✨</div> <span>إطلالة اليوم</span></div>
         <div class="phone-frame-feat">
           <div class="phone-notch"></div>
-          <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-08 at 02.19.43.png" class="phone-screen" alt="Styling">
+          <img src="recommender.png" class="phone-screen" alt="Styling">
         </div>
       </div>
     </div>
@@ -331,7 +417,7 @@
       </a>
     </div>
 
-    <p style="margin-top:4rem; font-size:0.8rem; opacity:0.5;">© 2025 دِثار.</p>
+    <p style="margin-top:4rem; font-size:0.8rem; opacity:0.5;">© 2026 دِثار.</p>
   </footer>
 
   <script>
@@ -352,7 +438,6 @@
         });
     }
 
-    // Animations (Intersection Observer)
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => { 
           if (entry.isIntersecting) {
