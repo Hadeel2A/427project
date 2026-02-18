@@ -4,279 +4,119 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>دِثار | خزانة المستقبل</title>
-  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
-  
   <style>
     :root {
-      --bg-main: #F9F7F3;
-      --text-main: #2C352C;
-      --text-muted: #6B7B6B;
-      --primary: #7B8C68;
-      --primary-dark: #5A6A4B;
-      --accent: #C5A065;
-      --glass: rgba(255, 255, 255, 0.95);
+      --bg-main: #F9F7F3; --text-main: #2C352C; --text-muted: #6B7B6B;
+      --primary: #7B8C68; --primary-dark: #5A6A4B; --accent: #C5A065;
+      --glass: rgba(255,255,255,0.95);
       --shadow-phone: 0 40px 80px rgba(0,0,0,0.15), 0 10px 20px rgba(0,0,0,0.05);
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    @media (hover: hover) and (pointer: fine) {
-        * { cursor: none; }
-    }
-
+    @media (hover: hover) and (pointer: fine) { * { cursor: none; } }
     html { scroll-behavior: smooth; }
     body { background-color: var(--bg-main); color: var(--text-main); font-family: 'Tajawal', sans-serif; overflow-x: hidden; }
-
     .noise { position: fixed; inset: 0; background: url('https://grainy-gradients.vercel.app/noise.svg'); opacity: 0.04; pointer-events: none; z-index: 9999; }
-    
-    .cursor { 
-        width: 15px; height: 15px; background: var(--primary); border-radius: 50%; 
-        position: fixed; pointer-events: none; z-index: 10000; 
-        transform: translate(-50%, -50%); transition: transform 0.2s; mix-blend-mode: multiply; 
-        display: none; 
-    }
-    .cursor.hovered { transform: translate(-50%, -50%) scale(4); opacity: 0.2; background: var(--accent); }
-    
-    @media (hover: hover) and (pointer: fine) {
-        .cursor { display: block; }
-    }
+    .cursor { width: 15px; height: 15px; background: var(--primary); border-radius: 50%; position: fixed; pointer-events: none; z-index: 10000; transform: translate(-50%,-50%); transition: transform 0.2s; mix-blend-mode: multiply; display: none; }
+    .cursor.hovered { transform: translate(-50%,-50%) scale(4); opacity: 0.2; background: var(--accent); }
+    @media (hover: hover) and (pointer: fine) { .cursor { display: block; } }
 
-    /* Nav */
     nav { position: fixed; top: 0; width: 100%; padding: 1rem 3rem; display: flex; justify-content: space-between; align-items: center; z-index: 100; background: rgba(249,247,243,0.8); backdrop-filter: blur(15px); }
     .nav-logo-img { height: 45px; width: auto; }
     .nav-btn { padding: 0.8rem 2rem; background: var(--text-main); color: white; border-radius: 50px; font-weight: 700; text-decoration: none; transition: 0.3s; }
     .nav-btn:hover { background: var(--primary); transform: translateY(-3px); }
 
-    /* ===== COMING SOON BADGE ===== */
-    .coming-soon-bar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 2.5rem;
-      opacity: 0;
-      animation: fadeUp 1s 0.05s forwards;
-    }
-
-    .coming-soon-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.55rem 1.4rem;
-      background: linear-gradient(135deg, rgba(197,160,101,0.12), rgba(197,160,101,0.06));
-      border: 1.5px solid rgba(197,160,101,0.45);
-      border-radius: 50px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* shimmer sweep */
-    .coming-soon-badge::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,0.55) 50%, transparent 70%);
-      transform: translateX(-120%);
-      animation: shimmer 2.8s ease-in-out infinite;
-    }
-
-    @keyframes shimmer {
-      0%   { transform: translateX(-120%); }
-      60%  { transform: translateX(120%); }
-      100% { transform: translateX(120%); }
-    }
-
-    .badge-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--accent);
-      flex-shrink: 0;
-      box-shadow: 0 0 0 0 rgba(197,160,101,0.6);
-      animation: pulse-dot 2s ease-out infinite;
-    }
-
-    @keyframes pulse-dot {
-      0%   { box-shadow: 0 0 0 0 rgba(197,160,101,0.6); }
-      70%  { box-shadow: 0 0 0 8px rgba(197,160,101,0); }
-      100% { box-shadow: 0 0 0 0 rgba(197,160,101,0); }
-    }
-
-    .badge-text {
-      font-family: 'Tajawal', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: #9A7040;
-      position: relative;
-    }
-
-    .badge-sep {
-      width: 1px;
-      height: 18px;
-      background: rgba(197,160,101,0.3);
-    }
-
-    .badge-label {
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      letter-spacing: 0.04em;
-    }
-    /* ============================= */
+    /* Coming Soon Badge */
+    .coming-soon-bar { display: flex; align-items: center; justify-content: center; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 1s 0.05s forwards; }
+    .coming-soon-badge { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.55rem 1.4rem; background: linear-gradient(135deg,rgba(197,160,101,0.12),rgba(197,160,101,0.06)); border: 1.5px solid rgba(197,160,101,0.45); border-radius: 50px; position: relative; overflow: hidden; }
+    .coming-soon-badge::before { content: ''; position: absolute; inset: 0; background: linear-gradient(100deg,transparent 30%,rgba(255,255,255,0.55) 50%,transparent 70%); transform: translateX(-120%); animation: shimmer 2.8s ease-in-out infinite; }
+    @keyframes shimmer { 0%,100% { transform: translateX(-120%); } 60% { transform: translateX(120%); } }
+    .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; animation: pulse-dot 2s ease-out infinite; }
+    @keyframes pulse-dot { 0% { box-shadow: 0 0 0 0 rgba(197,160,101,0.6); } 70% { box-shadow: 0 0 0 8px rgba(197,160,101,0); } 100% { box-shadow: 0 0 0 0 rgba(197,160,101,0); } }
+    .badge-text { font-size: 0.9rem; font-weight: 700; letter-spacing: 0.08em; color: #9A7040; position: relative; }
 
     /* Hero */
-    .hero { padding: 9rem 2rem 4rem; text-align: center; min-height: 100vh; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; }
+    .hero { padding: 9rem 2rem 4rem; text-align: center; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; }
     .hero-main-logo { height: 100px; margin-bottom: 2rem; opacity: 0; animation: fadeUp 1s forwards; }
-    
-    .hero h1 { 
-      font-size: clamp(2.5rem, 6vw, 4.5rem); 
-      font-weight: 900; 
-      line-height: 1.2; 
-      margin-bottom: 1.5rem; 
-      opacity: 0; 
-      animation: fadeUp 1s 0.2s forwards; 
-      color: var(--primary-dark);
-    }
-    .hero p { 
-      font-size: 1.3rem; 
-      color: var(--text-muted); 
-      margin-bottom: 3rem; 
-      opacity: 0; 
-      animation: fadeUp 1s 0.4s forwards; 
-      max-width: 700px; 
-      line-height: 1.8;
-    }
-    
-    .hero-showcase { position: relative; margin-top: 2rem; perspective: 1000px; opacity: 0; animation: fadeUp 1s 0.6s forwards; }
-    
-    .hero-phone { 
-      transform: rotateX(10deg); transition: 0.5s; width: 280px; height: 580px; 
-      background: #111; border-radius: 45px; border: 8px solid #2d2d2d; 
-      position: relative; overflow: hidden; box-shadow: var(--shadow-phone); 
-      z-index: 2; margin: 0 auto; 
-    }
-    @media (hover: hover) {
-      .hero-phone:hover { transform: rotateX(0deg) scale(1.02); }
-    }
+    .hero h1 { font-size: clamp(2.5rem,6vw,4.5rem); font-weight: 900; line-height: 1.2; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 1s 0.2s forwards; color: var(--primary-dark); }
+    .hero p { font-size: 1.3rem; color: var(--text-muted); margin-bottom: 3rem; opacity: 0; animation: fadeUp 1s 0.4s forwards; max-width: 700px; line-height: 1.8; }
+
+    /* Video Placeholder */
+    .video-section { width: 100%; max-width: 900px; margin: 0 auto 2rem; opacity: 0; animation: fadeUp 1s 0.6s forwards; }
+    .video-wrapper { position: relative; width: 100%; aspect-ratio: 16/9; background: linear-gradient(145deg,#1c211c,#2C352C); border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.2),0 15px 30px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.06); cursor: pointer; transition: transform 0.4s ease,box-shadow 0.4s ease; }
+    .video-wrapper:hover { transform: translateY(-4px); box-shadow: 0 60px 120px rgba(0,0,0,0.25),0 20px 40px rgba(0,0,0,0.12); }
+    .video-wrapper::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 15% 85%,rgba(123,140,104,0.2) 0%,transparent 50%),radial-gradient(ellipse at 85% 15%,rgba(197,160,101,0.12) 0%,transparent 50%); z-index: 1; }
+    .video-grid { position: absolute; inset: 0; z-index: 1; background-image: linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px); background-size: 60px 60px; }
+    .video-content { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.4rem; }
+    .play-btn { width: 76px; height: 76px; border-radius: 50%; background: rgba(255,255,255,0.07); border: 2px solid rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(12px); transition: all 0.3s ease; position: relative; }
+    .play-btn::before { content: ''; position: absolute; inset: -8px; border-radius: 50%; border: 1.5px solid rgba(197,160,101,0.35); animation: ring-pulse 2.5s ease-out infinite; }
+    .play-btn::after { content: ''; position: absolute; inset: -18px; border-radius: 50%; border: 1px solid rgba(197,160,101,0.15); animation: ring-pulse 2.5s ease-out 0.6s infinite; }
+    @keyframes ring-pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+    .play-btn svg { width: 28px; height: 28px; fill: rgba(255,255,255,0.88); transform: translateX(2px); }
+    .video-wrapper:hover .play-btn { background: rgba(197,160,101,0.22); border-color: rgba(197,160,101,0.55); transform: scale(1.1); }
+    .video-label { font-size: 1.05rem; font-weight: 600; color: rgba(255,255,255,0.45); letter-spacing: 0.03em; }
+    .video-chip { position: absolute; bottom: 1.2rem; right: 1.2rem; z-index: 4; display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.38rem 0.9rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; backdrop-filter: blur(8px); font-size: 0.72rem; color: rgba(255,255,255,0.38); font-weight: 500; }
+    .video-chip-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); opacity: 0.7; }
+    .video-meta { display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin-top: 1rem; font-size: 0.78rem; color: var(--text-muted); opacity: 0.55; }
+    .video-meta-line { width: 28px; height: 1px; background: var(--accent); opacity: 0.45; }
 
     .phone-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 25px; background: #111; border-radius: 0 0 20px 20px; z-index: 3; }
     .phone-screen { width: 100%; height: 100%; object-fit: cover; }
-
-    /* Tags */
-    .ui-tag { 
-      position: absolute; padding: 0.8rem 1.2rem; background: var(--glass); 
-      backdrop-filter: blur(10px); border-radius: 15px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); 
-      display: flex; align-items: center; gap: 0.8rem; font-weight: 700; font-size: 0.9rem; 
-      z-index: 4; animation: float 6s infinite ease-in-out; 
-    }
+    .ui-tag { position: absolute; padding: 0.8rem 1.2rem; background: var(--glass); backdrop-filter: blur(10px); border-radius: 15px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 0.8rem; font-weight: 700; font-size: 0.9rem; z-index: 4; animation: float 6s infinite ease-in-out; }
     .ui-icon { width: 30px; height: 30px; background: var(--bg-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-    /* Philosophy Section */
     .philosophy { padding: 6rem 2rem; background: #fff; margin: 4rem auto; max-width: 1400px; border-radius: 40px; text-align: center; }
     .sec-title { font-size: 2.5rem; color: var(--primary-dark); margin-bottom: 2rem; font-weight: 800; }
     .philo-text-box { max-width: 800px; margin: 0 auto 4rem; position: relative; }
     .philo-quote { font-size: 1.4rem; line-height: 2.2; color: var(--text-main); font-weight: 500; position: relative; }
     .philo-quote::before { content: '❝'; font-size: 4rem; color: var(--accent); opacity: 0.3; position: absolute; top: -2rem; right: -2rem; font-family: serif; }
-    
-    .philo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 3rem; }
+    .philo-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2rem; margin-top: 3rem; }
     .philo-item { transition: transform 0.3s; padding: 2rem; border: 1px solid rgba(0,0,0,0.03); border-radius: 20px; }
     .philo-item:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
     .philo-item img { height: 70px; margin-bottom: 1rem; object-fit: contain; }
-    .philo-item span { font-weight: 700; color: var(--primary); display: block; margin-top: 1rem; }
 
-    /* Features Section */
     .walkthrough { padding: 4rem 2rem; max-width: 1300px; margin: 0 auto; }
     .feature-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10rem; gap: 4rem; }
     .feature-row.reversed { flex-direction: row-reverse; }
     .feature-text { flex: 1; opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
     .feature-text.visible { opacity: 1; transform: translateY(0); }
-    .feature-num { font-size: 4rem; color: var(--accent); opacity: 0.2; font-weight: 900; font-family: 'Playfair Display', serif; display: block; margin-bottom: -1rem; }
+    .feature-num { font-size: 4rem; color: var(--accent); opacity: 0.2; font-weight: 900; font-family: 'Playfair Display',serif; display: block; margin-bottom: -1rem; }
     .feature-text h2 { font-size: 2.8rem; margin-bottom: 1.5rem; color: var(--primary-dark); }
     .feature-text p { font-size: 1.2rem; color: var(--text-muted); line-height: 1.8; }
-    
     .feature-visual { flex: 1; position: relative; display: flex; justify-content: center; }
-    .phone-frame-feat { 
-      width: 260px; height: 540px; background: #111; border-radius: 40px; 
-      border: 8px solid #2d2d2d; position: relative; overflow: hidden; 
-      box-shadow: var(--shadow-phone); transform: rotateY(-15deg) rotateX(5deg); 
-      transition: 0.5s; 
-    }
+    .phone-frame-feat { width: 260px; height: 540px; background: #111; border-radius: 40px; border: 8px solid #2d2d2d; position: relative; overflow: hidden; box-shadow: var(--shadow-phone); transform: rotateY(-15deg) rotateX(5deg); transition: 0.5s; }
     .feature-row.reversed .phone-frame-feat { transform: rotateY(15deg) rotateX(5deg); }
-    
-    @media (hover: hover) {
-      .feature-visual:hover .phone-frame-feat { transform: rotateY(0) rotateX(0) scale(1.02); }
-    }
+    @media (hover: hover) { .feature-visual:hover .phone-frame-feat { transform: rotateY(0) rotateX(0) scale(1.02); } }
 
-    /* Footer */
     footer { background: var(--primary-dark); color: #fff; padding: 5rem 2rem; text-align: center; border-radius: 60px 60px 0 0; }
-
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
-    /* Mobile */
     @media (max-width: 1024px) {
       nav { padding: 0.8rem 1.5rem; }
       .nav-btn { padding: 0.6rem 1.2rem; font-size: 0.85rem; }
-      
       .hero { padding: 8rem 1.5rem 3rem; }
       .hero-main-logo { height: 80px; }
       .hero h1 { font-size: 2.5rem; }
-
-      .coming-soon-bar { gap: 0.6rem; }
-      .badge-label { display: none; }
-      .badge-sep { display: none; }
-      
-      .philo-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .video-wrapper { border-radius: 16px; }
+      .play-btn { width: 58px; height: 58px; }
+      .play-btn svg { width: 22px; height: 22px; }
+      .video-chip { bottom: 0.7rem; right: 0.7rem; }
+      .philo-grid { grid-template-columns: repeat(2,1fr); gap: 1rem; }
       .philosophy { padding: 3rem 1.5rem; margin: 2rem auto; }
-      
       .walkthrough { padding: 2rem 1.5rem; }
-      .feature-row, .feature-row.reversed { flex-direction: column; text-align: center; gap: 3rem; margin-bottom: 6rem; }
-      
-      .feature-visual, .hero-showcase {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1.5rem;
-      }
-
-      .phone-frame, .phone-frame-feat { 
-        width: 260px; height: 520px; 
-        transform: none !important; 
-        order: 1;
-        margin: 0 auto;
-      }
-      
-      .ui-tag { 
-        position: static !important;
-        display: inline-flex;
-        transform: none !important;
-        animation: none !important;
-        margin: 0;
-        order: 2;
-        width: auto;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        border: 1px solid rgba(0,0,0,0.05);
-      }
-      
-      .hero-showcase .ui-tag, 
-      .feature-visual .ui-tag {
-        top: auto !important;
-        left: auto !important;
-        right: auto !important;
-        bottom: auto !important;
-      }
-      
+      .feature-row,.feature-row.reversed { flex-direction: column; text-align: center; gap: 3rem; margin-bottom: 6rem; }
+      .feature-visual { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+      .phone-frame,.phone-frame-feat { width: 260px; height: 520px; transform: none !important; order: 1; margin: 0 auto; }
+      .ui-tag { position: static !important; display: inline-flex; transform: none !important; animation: none !important; margin: 0; order: 2; width: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
+      .feature-visual .ui-tag { top:auto !important; left:auto !important; right:auto !important; bottom:auto !important; }
       footer { padding: 3rem 1.5rem; }
     }
   </style>
 </head>
 <body>
-
   <div class="noise"></div>
   <div class="cursor"></div>
 
@@ -288,31 +128,27 @@
   <section class="hero">
     <img src="logo.png" alt="Logo" class="hero-main-logo" onerror="this.style.display='none'">
 
-    <!-- ✦ Coming Soon Badge -->
     <div class="coming-soon-bar">
       <div class="coming-soon-badge">
         <span class="badge-dot"></span>
         <span class="badge-text">قريبًا</span>
       </div>
-      <span class="badge-sep"></span>
-      <span class="badge-label">التطبيق في قيد التطوير </span>
     </div>
     
-    <h1>حولنا الخزانة من جماد..<br>إلى مساعد <span style="color:var(--accent); position:relative; display:inline-block;">ذكي<svg style="position:absolute; bottom:-10px; left:0; width:100%; height:10px; fill:none; stroke:var(--accent); stroke-width:3;" viewBox="0 0 100 10"><path d="M0 5 Q 50 10 100 5"></path></svg></span></h1>
+    <h1>حولنا الخزانة من جماد..<br>إلى مساعد <span style="color:var(--accent);position:relative;display:inline-block;">ذكي<svg style="position:absolute;bottom:-10px;left:0;width:100%;height:10px;fill:none;stroke:var(--accent);stroke-width:3;" viewBox="0 0 100 10"><path d="M0 5 Q 50 10 100 5"></path></svg></span></h1>
     <p>دِثار هو 'العقل' الذكي لخزانتك. تقنية تستشعر وجود كل قطعة تملكها، وتتولى عنك مهمة التنظيم والتنسيق بالكامل.</p>
-    
-    <div class="hero-showcase">
-      <div class="ui-tag" style="top: 20%; right: -40px;"><div class="ui-icon">📱</div> <span>واجهة تفاعلية</span></div>
-      <div class="hero-phone">
-        <div class="phone-notch"></div>
-        <img src="firstScreen.png" class="phone-screen" alt="App">
+
+    <div class="video-section">
+      <div class="video-wrapper">
+        <video id="demo" controls width="100%" height="100%" style="display:block;width:100%;height:100%;object-fit:cover;">
+          <source src="demo.mp4" type="video/mp4">
+        </video>
       </div>
     </div>
   </section>
 
   <section class="philosophy hover-target">
     <h2 class="sec-title">فلسفة الشعار</h2>
-    
     <div class="philo-text-box">
       <p class="philo-quote">
         يستمدّ شعار دِثار جذوره من المعنى العربي ما يتدثّر به الإنسان من ثياب أو غطاء. 
@@ -320,25 +156,15 @@
         ليعكس جوهر الفكرة في تقديم نظام ذكي يُعيد تنظيم الثياب والتعرّف عليها بسهولة.
       </p>
     </div>
-
     <div class="philo-grid">
-      <div class="philo-item">
-        <img src="d.png" alt="1" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=1'">
-      </div>
-      <div class="philo-item">
-        <img src="th.png" alt="2" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=2'">
-      </div>
-      <div class="philo-item">
-        <img src="a.png" alt="3" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=3'">
-      </div>
-      <div class="philo-item">
-        <img src="r.png" alt="4" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=4'">
-      </div>
+      <div class="philo-item"><img src="d.png" alt="1" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=1'"></div>
+      <div class="philo-item"><img src="th.png" alt="2" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=2'"></div>
+      <div class="philo-item"><img src="a.png" alt="3" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=3'"></div>
+      <div class="philo-item"><img src="r.png" alt="4" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=4'"></div>
     </div>
   </section>
 
   <section class="walkthrough">
-    
     <div class="feature-row scroll-trigger">
       <div class="feature-text">
         <span class="feature-num">01</span>
@@ -346,11 +172,8 @@
         <p>يعرض جميع القطع بطريقة واضحة ومقسّمة حسب الفئة واللون، حيث تسطيع وجود أي قطعة خلال ثواني.</p>
       </div>
       <div class="feature-visual">
-        <div class="ui-tag" style="top:15%; right:-20px;"><div class="ui-icon">📁</div> <span>تصنيف ذكي</span></div>
-        <div class="phone-frame-feat">
-           <div class="phone-notch"></div>
-           <img src="showCategory.png" class="phone-screen" alt="Organized">
-        </div>
+        <div class="ui-tag" style="top:15%;right:-20px;"><div class="ui-icon">📁</div><span>تصنيف ذكي</span></div>
+        <div class="phone-frame-feat"><div class="phone-notch"></div><img src="showCategory.png" class="phone-screen" alt="Organized"></div>
       </div>
     </div>
 
@@ -361,12 +184,8 @@
         <p>يحدد مباشرة هل القطعة داخل الدولاب أو خارجـه (باستخدام القارئ الذكي)، ويعرض آخر مرة تم استخدامها لتتبع الاستخدام بسهولة.</p>
       </div>
       <div class="feature-visual">
-        <div class="ui-tag" style="top:40%; left:-30px;"><div class="ui-icon">📡</div> <span>تحديث مباشر</span></div>
-        
-        <div class="phone-frame-feat">
-          <div class="phone-notch"></div>
-          <img src="Wradrobe.png" class="phone-screen" alt="Tracking Screen">
-        </div>
+        <div class="ui-tag" style="top:40%;left:-30px;"><div class="ui-icon">📡</div><span>تحديث مباشر</span></div>
+        <div class="phone-frame-feat"><div class="phone-notch"></div><img src="Wradrobe.png" class="phone-screen" alt="Tracking Screen"></div>
       </div>
     </div>
 
@@ -377,11 +196,8 @@
         <p>يوفر وصفًا صوتيًا للقطع، مع تصميم متوافق مع أدوات الوصول، لتجربة بسيطة وواضحة بدون أي تعقيد.</p>
       </div>
       <div class="feature-visual">
-        <div class="ui-tag" style="bottom:20%; right:-20px;"><div class="ui-icon">🔊</div> <span>وصف صوتي</span></div>
-        <div class="phone-frame-feat">
-          <div class="phone-notch"></div>
-          <img src="Audio.png" class="phone-screen" alt="Accessibility">
-        </div>
+        <div class="ui-tag" style="bottom:20%;right:-20px;"><div class="ui-icon">🔊</div><span>وصف صوتي</span></div>
+        <div class="phone-frame-feat"><div class="phone-notch"></div><img src="Audio.png" class="phone-screen" alt="Accessibility"></div>
       </div>
     </div>
 
@@ -392,60 +208,37 @@
         <p>يقدم لك تنسيقات مناسبة من ملابسك المتوفرة، لتسهيل اختيار الإطلالة اليومية.</p>
       </div>
       <div class="feature-visual">
-        <div class="ui-tag" style="top:15%; left:-10px;"><div class="ui-icon">✨</div> <span>إطلالة اليوم</span></div>
-        <div class="phone-frame-feat">
-          <div class="phone-notch"></div>
-          <img src="recommender.png" class="phone-screen" alt="Styling">
-        </div>
+        <div class="ui-tag" style="top:15%;left:-10px;"><div class="ui-icon">✨</div><span>إطلالة اليوم</span></div>
+        <div class="phone-frame-feat"><div class="phone-notch"></div><img src="recommender.png" class="phone-screen" alt="Styling"></div>
       </div>
     </div>
-
   </section>
 
-<footer id="contact">
-    <img src="logo.png" style="height: 60px; filter: brightness(0) invert(1); margin-bottom:1rem;" alt="Logo" onerror="this.style.display='none'">
-    
-    <p style="opacity:0.8; margin-bottom:2rem;">دِثار أناقة تُدار بذكاء.</p>
-    
-    <div style="margin-top: 1rem;">
-      <a href="mailto:dithar.project@gmail.com?subject=استفسار%20عن%20تطبيق%20دِثار" class="hover-target" style="color: rgba(255,255,255,0.7); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: color 0.3s;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-        </svg>
-        <span style="font-family: sans-serif; letter-spacing: 0.5px;">dithar.project@gmail.com</span>
+  <footer id="contact">
+    <img src="logo.png" style="height:60px;filter:brightness(0) invert(1);margin-bottom:1rem;" alt="Logo" onerror="this.style.display='none'">
+    <p style="opacity:0.8;margin-bottom:2rem;">دِثار أناقة تُدار بذكاء.</p>
+    <div style="margin-top:1rem;">
+      <a href="/cdn-cgi/l/email-protection#593d302d31382b77292b36333c3a2d193e34383035773a3634662a2c3b333c3a2d6481fe81ea81f380d881ea81fe81e87c6b6981e080df7c6b6981f381ee81f180d380db7c6b6981f680c981f281fe81e8" class="hover-target" style="color:rgba(255,255,255,0.7);text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;font-size:0.9rem;transition:color 0.3s;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+        <span style="font-family:sans-serif;letter-spacing:0.5px;"><span class="__cf_email__" data-cfemail="b3d7dac7dbd2c19dc3c1dcd9d6d0c7f3d4ded2dadf9dd0dcde">[email&#160;protected]</span></span>
       </a>
     </div>
-
-    <p style="margin-top:4rem; font-size:0.8rem; opacity:0.5;">© 2026 دِثار.</p>
+    <p style="margin-top:4rem;font-size:0.8rem;opacity:0.5;">© 2026 دِثار.</p>
   </footer>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     const cursor = document.querySelector('.cursor');
-    const hoverTargets = document.querySelectorAll('.hover-target, a, button');
-    
     const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-
     if (isDesktop) {
-        document.addEventListener('mousemove', (e) => { 
-            cursor.style.left = e.clientX + 'px'; 
-            cursor.style.top = e.clientY + 'px'; 
-        });
-        
-        hoverTargets.forEach(target => { 
-            target.addEventListener('mouseenter', () => cursor.classList.add('hovered')); 
-            target.addEventListener('mouseleave', () => cursor.classList.remove('hovered')); 
-        });
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => { 
-          if (entry.isIntersecting) {
-              entry.target.querySelector('.feature-text').classList.add('visible'); 
-          }
+      document.addEventListener('mousemove', e => { cursor.style.left = e.clientX+'px'; cursor.style.top = e.clientY+'px'; });
+      document.querySelectorAll('.hover-target, a, button').forEach(t => {
+        t.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+        t.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
       });
-    }, { threshold: 0.2 }); 
-    
+    }
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.querySelector('.feature-text').classList.add('visible'); });
+    }, { threshold: 0.2 });
     document.querySelectorAll('.scroll-trigger').forEach(el => observer.observe(el));
   </script>
 </body>
