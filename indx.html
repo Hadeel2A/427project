@@ -1,142 +1,367 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>دِثار | أناقة تُدار بذكاء</title>
-  <meta name="description" content="دِثار — تطبيق ذكي لتنظيم خزانة ملابسك واقتراح التنسيقات باستخدام الذكاء الاصطناعي وتقنية RFID.">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>دِثار | خزانة المستقبل</title>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  
   <style>
-    :root{
-      --bg:#F9F7F3;
-      --text:#2F3A2F;
-      --muted:#5f6b5f;
-      --brand:#7B8C68;
-      --brand-2:#9DAE8C;
-      --card:#FFFFFF;
+    :root {
+      --bg-main: #F9F7F3;
+      --text-main: #2C352C;
+      --text-muted: #6B7B6B;
+      --primary: #7B8C68;
+      --primary-dark: #5A6A4B;
+      --accent: #C5A065;
+      --glass: rgba(255, 255, 255, 0.95); /* زيادة التعتيم قليلاً للوضوح */
+      --shadow-phone: 0 40px 80px rgba(0,0,0,0.15), 0 10px 20px rgba(0,0,0,0.05);
     }
-    *{box-sizing:border-box}
-    body{
-      margin:0; background:var(--bg); color:var(--text);
-      font-family:"Tajawal", system-ui, -apple-system, Tahoma, Arial, sans-serif;
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    @media (hover: hover) and (pointer: fine) {
+        * { cursor: none; }
     }
-    .container{max-width:1100px;margin:auto;padding:0 20px}
-    header{
-      position:sticky; top:0; z-index:10;
-      background:rgba(249,247,243,.8); backdrop-filter:saturate(180%) blur(8px);
-      border-bottom:1px solid #ece9e3;
+
+    html { scroll-behavior: smooth; }
+    body { background-color: var(--bg-main); color: var(--text-main); font-family: 'Tajawal', sans-serif; overflow-x: hidden; }
+
+    /* Noise & Cursor */
+    .noise { position: fixed; inset: 0; background: url('https://grainy-gradients.vercel.app/noise.svg'); opacity: 0.04; pointer-events: none; z-index: 9999; }
+    
+    .cursor { 
+        width: 15px; height: 15px; background: var(--primary); border-radius: 50%; 
+        position: fixed; pointer-events: none; z-index: 10000; 
+        transform: translate(-50%, -50%); transition: transform 0.2s; mix-blend-mode: multiply; 
+        display: none; 
     }
-    .nav{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
-    .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit}
-    .brand img{height:36px; width:auto}
-    .brand-title{font-weight:800; letter-spacing:.2px}
-    .nav a.cta{
-      padding:10px 16px; border-radius:10px; text-decoration:none; color:#fff;
-      background:linear-gradient(90deg,var(--brand),var(--brand-2));
-      font-weight:700;
+    .cursor.hovered { transform: translate(-50%, -50%) scale(4); opacity: 0.2; background: var(--accent); }
+    
+    @media (hover: hover) and (pointer: fine) {
+        .cursor { display: block; }
     }
+
+    /* Nav */
+    nav { position: fixed; top: 0; width: 100%; padding: 1rem 3rem; display: flex; justify-content: space-between; align-items: center; z-index: 100; background: rgba(249,247,243,0.8); backdrop-filter: blur(15px); }
+    .nav-logo-img { height: 45px; width: auto; }
+    .nav-btn { padding: 0.8rem 2rem; background: var(--text-main); color: white; border-radius: 50px; font-weight: 700; text-decoration: none; transition: 0.3s; }
+    .nav-btn:hover { background: var(--primary); transform: translateY(-3px); }
+
     /* Hero */
-    .hero{display:grid; grid-template-columns:1.2fr .8fr; gap:30px; padding:60px 0}
-    .hero h1{font-size:42px; line-height:1.2; margin:0 0 12px}
-    .hero p{font-size:18px; color:var(--muted); margin:0 0 22px}
-    .buttons{display:flex; gap:12px; flex-wrap:wrap}
-    .btn{
-      padding:12px 18px; border-radius:12px; text-decoration:none; font-weight:700;
-      display:inline-block;
+    .hero { padding: 9rem 2rem 4rem; text-align: center; min-height: 100vh; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; }
+    .hero-main-logo { height: 100px; margin-bottom: 2rem; opacity: 0; animation: fadeUp 1s forwards; }
+    
+    .hero h1 { 
+      font-size: clamp(2.5rem, 6vw, 4.5rem); 
+      font-weight: 900; 
+      line-height: 1.2; 
+      margin-bottom: 1.5rem; 
+      opacity: 0; 
+      animation: fadeUp 1s 0.2s forwards; 
+      color: var(--primary-dark);
     }
-    .btn.primary{color:#fff; background:linear-gradient(90deg,var(--brand),var(--brand-2))}
-    .btn.ghost{color:var(--text); border:1px solid #d9d5cf; background:#fff}
-    .card{
-      background:var(--card); border:1px solid #eee; border-radius:16px; padding:22px;
-      box-shadow:0 8px 20px rgba(0,0,0,.04);
+    .hero p { 
+      font-size: 1.3rem; 
+      color: var(--text-muted); 
+      margin-bottom: 3rem; 
+      opacity: 0; 
+      animation: fadeUp 1s 0.4s forwards; 
+      max-width: 700px; 
+      line-height: 1.8;
     }
-    /* Features */
-    .features{padding:10px 0 60px}
-    .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px}
-    .feat h3{margin:0 0 8px; font-size:18px}
-    .feat p{margin:0; color:var(--muted)}
-    /* Contact */
-    .contact{padding:50px 0}
-    .contact .card{display:flex; align-items:center; justify-content:space-between; gap:16px}
-    .links{display:flex; gap:12px; flex-wrap:wrap}
-    .links a{color:#fff; text-decoration:none; padding:10px 14px; border-radius:10px; background:var(--brand)}
-    footer{padding:24px 0; color:#8a8a8a; border-top:1px solid #ece9e3; text-align:center}
-    /* Responsive */
-    @media (max-width: 900px){
-      .hero{grid-template-columns:1fr; text-align:center}
-      .contact .card{flex-direction:column; align-items:flex-start}
+    
+    .hero-showcase { position: relative; margin-top: 2rem; perspective: 1000px; opacity: 0; animation: fadeUp 1s 0.6s forwards; }
+    
+    .hero-phone { 
+      transform: rotateX(10deg); transition: 0.5s; width: 280px; height: 580px; 
+      background: #111; border-radius: 45px; border: 8px solid #2d2d2d; 
+      position: relative; overflow: hidden; box-shadow: var(--shadow-phone); 
+      z-index: 2; margin: 0 auto; 
+    }
+    @media (hover: hover) {
+      .hero-phone:hover { transform: rotateX(0deg) scale(1.02); }
+    }
+
+    .phone-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 25px; background: #111; border-radius: 0 0 20px 20px; z-index: 3; }
+    .phone-screen { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Tags */
+    .ui-tag { 
+      position: absolute; padding: 0.8rem 1.2rem; background: var(--glass); 
+      backdrop-filter: blur(10px); border-radius: 15px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); 
+      display: flex; align-items: center; gap: 0.8rem; font-weight: 700; font-size: 0.9rem; 
+      z-index: 4; animation: float 6s infinite ease-in-out; 
+    }
+    .ui-icon { width: 30px; height: 30px; background: var(--bg-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+    /* Philosophy Section */
+    .philosophy { padding: 6rem 2rem; background: #fff; margin: 4rem auto; max-width: 1400px; border-radius: 40px; text-align: center; }
+    .sec-title { font-size: 2.5rem; color: var(--primary-dark); margin-bottom: 2rem; font-weight: 800; }
+    .philo-text-box { max-width: 800px; margin: 0 auto 4rem; position: relative; }
+    .philo-quote { font-size: 1.4rem; line-height: 2.2; color: var(--text-main); font-weight: 500; position: relative; }
+    .philo-quote::before { content: '❝'; font-size: 4rem; color: var(--accent); opacity: 0.3; position: absolute; top: -2rem; right: -2rem; font-family: serif; }
+    
+    .philo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 3rem; }
+    .philo-item { transition: transform 0.3s; padding: 2rem; border: 1px solid rgba(0,0,0,0.03); border-radius: 20px; }
+    .philo-item:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    .philo-item img { height: 70px; margin-bottom: 1rem; object-fit: contain; }
+    .philo-item span { font-weight: 700; color: var(--primary); display: block; margin-top: 1rem; }
+
+    /* Features Section */
+    .walkthrough { padding: 4rem 2rem; max-width: 1300px; margin: 0 auto; }
+    .feature-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10rem; gap: 4rem; }
+    .feature-row.reversed { flex-direction: row-reverse; }
+    .feature-text { flex: 1; opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+    .feature-text.visible { opacity: 1; transform: translateY(0); }
+    .feature-num { font-size: 4rem; color: var(--accent); opacity: 0.2; font-weight: 900; font-family: 'Playfair Display', serif; display: block; margin-bottom: -1rem; }
+    .feature-text h2 { font-size: 2.8rem; margin-bottom: 1.5rem; color: var(--primary-dark); }
+    .feature-text p { font-size: 1.2rem; color: var(--text-muted); line-height: 1.8; }
+    
+    .feature-visual { flex: 1; position: relative; display: flex; justify-content: center; }
+    .phone-frame-feat { 
+      width: 260px; height: 540px; background: #111; border-radius: 40px; 
+      border: 8px solid #2d2d2d; position: relative; overflow: hidden; 
+      box-shadow: var(--shadow-phone); transform: rotateY(-15deg) rotateX(5deg); 
+      transition: 0.5s; 
+    }
+    .feature-row.reversed .phone-frame-feat { transform: rotateY(15deg) rotateX(5deg); }
+    
+    @media (hover: hover) {
+      .feature-visual:hover .phone-frame-feat { transform: rotateY(0) rotateX(0) scale(1.02); }
+    }
+
+    /* Footer */
+    footer { background: var(--primary-dark); color: #fff; padding: 5rem 2rem; text-align: center; border-radius: 60px 60px 0 0; }
+
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* --- تحسينات الجوال (Mobile Fixed) --- */
+    @media (max-width: 1024px) {
+      nav { padding: 0.8rem 1.5rem; }
+      .nav-btn { padding: 0.6rem 1.2rem; font-size: 0.85rem; }
+      
+      .hero { padding: 8rem 1.5rem 3rem; }
+      .hero-main-logo { height: 80px; }
+      .hero h1 { font-size: 2.5rem; }
+      
+      .philo-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .philosophy { padding: 3rem 1.5rem; margin: 2rem auto; }
+      
+      .walkthrough { padding: 2rem 1.5rem; }
+      .feature-row, .feature-row.reversed { flex-direction: column; text-align: center; gap: 3rem; margin-bottom: 6rem; }
+      
+      /* تعديل هام: ترتيب العناصر في الجوال */
+      /* نجعل الحاوية عمودية */
+      .feature-visual, .hero-showcase {
+        display: flex;
+        flex-direction: column; /* الجوال أولاً، التسمية تحته */
+        align-items: center;
+        gap: 1.5rem;
+      }
+
+      /* الجوال: ثابت وبدون دوران */
+      .phone-frame, .phone-frame-feat { 
+        width: 260px; height: 520px; 
+        transform: none !important; 
+        order: 1; /* الجوال يظهر أولاً */
+        margin: 0 auto;
+      }
+      
+      /* البطاقة العائمة: تصبح ثابتة تحت الجوال */
+      .ui-tag { 
+        position: static !important; /* إلغاء التموضع الحر */
+        display: inline-flex;
+        transform: none !important;
+        animation: none !important; /* إلغاء الحركة */
+        margin: 0;
+        order: 2; /* التسمية تظهر ثانياً (تحت الجوال) */
+        width: auto;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* ظل خفيف */
+        border: 1px solid rgba(0,0,0,0.05);
+      }
+      
+      /* إلغاء الستايلات المضمنة للبطاقات في الجوال */
+      .hero-showcase .ui-tag, 
+      .feature-visual .ui-tag {
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+      }
+      
+      footer { padding: 3rem 1.5rem; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="container nav">
-      <a class="brand" href="#top">
-        <img src="logo.png" alt="شعار دِثار">
-        <span class="brand-title">دِثار</span>
-      </a>
-      <a class="cta" href="#contact">تواصل معنا</a>
+
+  <div class="noise"></div>
+  <div class="cursor"></div>
+
+  <nav>
+    <img src="logo.png" alt="دِثار" class="nav-logo-img" onerror="this.src='https://via.placeholder.com/100/7B8C68/FFFFFF?text=Dithar'">
+    <a href="#contact" class="nav-btn hover-target">تواصل معنا</a>
+  </nav>
+
+  <section class="hero">
+    <img src="logo.png" alt="Logo" class="hero-main-logo" onerror="this.style.display='none'">
+    
+    <h1>حولنا الخزانة من جماد..<br>إلى مساعد <span style="color:var(--accent); position:relative; display:inline-block;">ذكي<svg style="position:absolute; bottom:-10px; left:0; width:100%; height:10px; fill:none; stroke:var(--accent); stroke-width:3;" viewBox="0 0 100 10"><path d="M0 5 Q 50 10 100 5"></path></svg></span></h1>
+    <p>دِثار هو 'العقل' الذكي لخزانتك. تقنية تستشعر وجود كل قطعة تملكها، وتتولى عنك مهمة التنظيم والتنسيق بالكامل.</p>
+    
+    <div class="hero-showcase">
+      <div class="ui-tag" style="top: 20%; right: -40px;"><div class="ui-icon">📱</div> <span>واجهة تفاعلية</span></div>
+      <div class="hero-phone">
+        <div class="phone-notch"></div>
+        <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-08 at 02.25.35.png" class="phone-screen" alt="App">
+      </div>
     </div>
-  </header>
+  </section>
 
-  <main id="top" class="container">
-    <!-- Hero -->
-    <section class="hero">
-      <div>
-        <h1>دِثار — أناقة تُدار بذكاء</h1>
-        <p>تطبيق ذكي ينظم خزانتك، يقترح تنسيقات مناسبة، ويتتبع قطعك باستخدام الذكاء الاصطناعي وتقنية RFID.</p>
-        <div class="buttons">
-          <a class="btn primary" href="#features">تعرّف على المزايا</a>
-          <a class="btn ghost" href="#contact">قريبًا على App&nbsp;Store</a>
+  <section class="philosophy hover-target">
+    <h2 class="sec-title">فلسفة الشعار</h2>
+    
+    <div class="philo-text-box">
+      <p class="philo-quote">
+        يستمدّ شعار دِثار جذوره من المعنى العربي ما يتدثّر به الإنسان من ثياب أو غطاء. 
+        وقد تُرجِم هذا المعنى إلى شكل بصري مستوحى من انحناءات علّاقة الملابس، 
+        ليعكس جوهر الفكرة في تقديم نظام ذكي يُعيد تنظيم الثياب والتعرّف عليها بسهولة.
+      </p>
+    </div>
+
+    <div class="philo-grid">
+      <div class="philo-item">
+        <img src="logo1.PNG" alt="1" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=1'">
+      </div>
+      <div class="philo-item">
+        <img src="logo2.PNG" alt="2" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=2'">
+      </div>
+      <div class="philo-item">
+        <img src="logo3.PNG" alt="3" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=3'">
+      </div>
+      <div class="philo-item">
+        <img src="logo4.PNG" alt="4" onerror="this.src='https://via.placeholder.com/80/7B8C68/FFFFFF?text=4'">
+      </div>
+    </div>
+  </section>
+
+  <section class="walkthrough">
+    
+    <div class="feature-row scroll-trigger">
+      <div class="feature-text">
+        <span class="feature-num">01</span>
+        <h2>كل ملابسك مرتّبة في مكان واحد</h2>
+        <p>يعرض جميع القطع بطريقة واضحة ومقسّمة حسب الفئة واللون، حيث تسطيع وجود أي قطعة خلال ثواني.</p>
+      </div>
+      <div class="feature-visual">
+        <div class="ui-tag" style="top:15%; right:-20px;"><div class="ui-icon">📁</div> <span>تصنيف ذكي</span></div>
+        <div class="phone-frame-feat">
+           <div class="phone-notch"></div>
+           <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-08 at 02.16.42.png" class="phone-screen" alt="Organized">
         </div>
       </div>
-      <div class="card" aria-hidden="true">
-        <img src="/assets/logo.png" alt="" style="width:100%; max-width:360px; display:block; margin:0 auto; opacity:.95">
-      </div>
-    </section>
+    </div>
 
-    <!-- Features -->
-    <section id="features" class="features">
-      <div class="grid">
-        <div class="card feat">
-          <h3>اقتراح تنسيقات ذكي</h3>
-          <p>خوارزميات ترشح لك إطلالات يومية حسب الطقس والمناسبة والألوان المفضلة.</p>
-        </div>
-        <div class="card feat">
-          <h3>تتبّع وتنظيم بالخزانه</h3>
-          <p>سجّلي القطع وصوّريها ورتّبيها في مجموعات، واعرفي عدد مرات الاستخدام.</p>
-        </div>
-        <div class="card feat">
-          <h3>تكامل RFID (اختياري)</h3>
-          <p>تعرف تلقائي على القطع المعلّمة لتسريع عملية الاختيار والجرد.</p>
+    <div class="feature-row reversed scroll-trigger">
+      <div class="feature-text">
+        <span class="feature-num">02</span>
+        <h2>تتبّع لحظي لمكان القطعة</h2>
+        <p>يحدد مباشرة هل القطعة داخل الدولاب أو خارجـه (باستخدام القارئ الذكي)، ويعرض آخر مرة تم استخدامها لتتبع الاستخدام بسهولة.</p>
+      </div>
+      <div class="feature-visual">
+        <div class="ui-tag" style="top:40%; left:-30px;"><div class="ui-icon">📡</div> <span>تحديث مباشر</span></div>
+        
+        <div class="phone-frame-feat">
+          <div class="phone-notch"></div>
+          <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-08 at 12.00.27.png" class="phone-screen" alt="Tracking Screen">
         </div>
       </div>
-    </section>
+    </div>
 
-    <!-- Contact -->
-    <section id="contact" class="contact">
-      <div class="card">
-        <div>
-          <h3 style="margin:0 0 6px">تواصل معنا</h3>
-          <p style="margin:0; color:var(--muted)">يسعدنا سماع اقتراحاتك وتجربتك مع دِثار.</p>
-        </div>
-        <div class="links">
-          <a href="mailto:dithar.project@gmail.com" aria-label="البريد">البريد</a>
-          <a href="https://instagram.com/" target="_blank" rel="noopener">إنستغرام</a>
-          <a href="https://x.com/" target="_blank" rel="noopener">X (تويتر)</a>
+    <div class="feature-row scroll-trigger">
+      <div class="feature-text">
+        <span class="feature-num">03</span>
+        <h2>وصول مريح وسلس لكل المستخدمين</h2>
+        <p>يوفر وصفًا صوتيًا للقطع، مع تصميم متوافق مع أدوات الوصول، لتجربة بسيطة وواضحة بدون أي تعقيد.</p>
+      </div>
+      <div class="feature-visual">
+        <div class="ui-tag" style="bottom:20%; right:-20px;"><div class="ui-icon">🔊</div> <span>وصف صوتي</span></div>
+        <div class="phone-frame-feat">
+          <div class="phone-notch"></div>
+          <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-08 at 12.00.35.png" class="phone-screen" alt="Accessibility">
         </div>
       </div>
-    </section>
-  </main>
+    </div>
 
-  <footer>
-    © <span id="y"></span> دِثار — جميع الحقوق محفوظة.
+    <div class="feature-row reversed scroll-trigger">
+      <div class="feature-text">
+        <span class="feature-num">04</span>
+        <h2>اقتراحات إطلالات ذكية</h2>
+        <p>يقدم لك تنسيقات مناسبة من ملابسك المتوفرة، لتسهيل اختيار الإطلالة اليومية.</p>
+      </div>
+      <div class="feature-visual">
+        <div class="ui-tag" style="top:15%; left:-10px;"><div class="ui-icon">✨</div> <span>إطلالة اليوم</span></div>
+        <div class="phone-frame-feat">
+          <div class="phone-notch"></div>
+          <img src="Simulator Screenshot - iPhone 17 Pro - 2025-12-08 at 02.19.43.png" class="phone-screen" alt="Styling">
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+<footer id="contact">
+    <img src="logo.png" style="height: 60px; filter: brightness(0) invert(1); margin-bottom:1rem;" alt="Logo" onerror="this.style.display='none'">
+    
+    <p style="opacity:0.8; margin-bottom:2rem;">دِثار أناقة تُدار بذكاء.</p>
+    
+    <div style="margin-top: 1rem;">
+      <a href="mailto:dithar.project@gmail.com?subject=استفسار%20عن%20تطبيق%20دِثار" class="hover-target" style="color: rgba(255,255,255,0.7); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; transition: color 0.3s;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+        </svg>
+        <span style="font-family: sans-serif; letter-spacing: 0.5px;">dithar.project@gmail.com</span>
+      </a>
+    </div>
+
+    <p style="margin-top:4rem; font-size:0.8rem; opacity:0.5;">© 2025 دِثار.</p>
   </footer>
 
   <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
+    const cursor = document.querySelector('.cursor');
+    const hoverTargets = document.querySelectorAll('.hover-target, a, button');
+    
+    const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+    if (isDesktop) {
+        document.addEventListener('mousemove', (e) => { 
+            cursor.style.left = e.clientX + 'px'; 
+            cursor.style.top = e.clientY + 'px'; 
+        });
+        
+        hoverTargets.forEach(target => { 
+            target.addEventListener('mouseenter', () => cursor.classList.add('hovered')); 
+            target.addEventListener('mouseleave', () => cursor.classList.remove('hovered')); 
+        });
+    }
+
+    // Animations (Intersection Observer)
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { 
+          if (entry.isIntersecting) {
+              entry.target.querySelector('.feature-text').classList.add('visible'); 
+          }
+      });
+    }, { threshold: 0.2 }); 
+    
+    document.querySelectorAll('.scroll-trigger').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
