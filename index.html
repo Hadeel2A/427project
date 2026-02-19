@@ -7,6 +7,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+
+  <!-- ======================================================= -->
+  <!--  🔴 STEP 1: Replace G-XXXXXXXXXX with your real GA4 ID  -->
+  <!-- ======================================================= -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5MP7M0R7BF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5MP7M0R7BF');
+  </script>
+
   <style>
     :root {
       --bg-main: #F9F7F3; --text-main: #2C352C; --text-muted: #6B7B6B;
@@ -23,10 +35,30 @@
     .cursor.hovered { transform: translate(-50%,-50%) scale(4); opacity: 0.2; background: var(--accent); }
     @media (hover: hover) and (pointer: fine) { .cursor { display: block; } }
 
+    /* ── NAV ── */
     nav { position: fixed; top: 0; width: 100%; padding: 1rem 3rem; display: flex; justify-content: space-between; align-items: center; z-index: 100; background: rgba(249,247,243,0.8); backdrop-filter: blur(15px); }
     .nav-logo-img { height: 45px; width: auto; }
-    .nav-btn { padding: 0.8rem 2rem; background: var(--text-main); color: white; border-radius: 50px; font-weight: 700; text-decoration: none; transition: 0.3s; }
+
+    /* Nav right side: contact + subscribe together */
+    .nav-actions { display: flex; align-items: center; gap: 0.8rem; }
+
+    /* Subscribe pill in nav */
+    .nav-subscribe-pill { display: flex; align-items: center; gap: 0; background: #fff; border: 1.5px solid rgba(123,140,104,0.35); border-radius: 50px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: box-shadow 0.3s, border-color 0.3s; }
+    .nav-subscribe-pill:focus-within { border-color: var(--accent); box-shadow: 0 2px 18px rgba(197,160,101,0.25); }
+    .nav-subscribe-pill input { border: none; outline: none; background: transparent; padding: 0.65rem 1rem; font-family: 'Tajawal', sans-serif; font-size: 0.85rem; color: var(--text-main); width: 200px; direction: rtl; }
+    .nav-subscribe-pill input::placeholder { color: var(--text-muted); }
+    .nav-subscribe-btn { padding: 0.65rem 1.2rem; background: var(--primary-dark); color: white; border: none; border-radius: 0 50px 50px 0; font-family: 'Tajawal', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: background 0.3s, transform 0.2s; white-space: nowrap; }
+    .nav-subscribe-btn:hover { background: var(--accent); }
+    .nav-subscribe-btn.loading { opacity: 0.7; pointer-events: none; }
+
+    .nav-btn { padding: 0.8rem 2rem; background: var(--text-main); color: white; border-radius: 50px; font-weight: 700; text-decoration: none; transition: 0.3s; white-space: nowrap; }
     .nav-btn:hover { background: var(--primary); transform: translateY(-3px); }
+
+    /* Toast notification */
+    .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--primary-dark); color: white; padding: 1rem 2rem; border-radius: 50px; font-size: 0.95rem; font-weight: 600; z-index: 99999; transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1); box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 0.6rem; pointer-events: none; }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.error { background: #9B4444; }
+    .toast-icon { font-size: 1.1rem; }
 
     /* Coming Soon Badge */
     .coming-soon-bar { display: flex; align-items: center; justify-content: center; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 1s 0.05s forwards; }
@@ -43,7 +75,7 @@
     .hero h1 { font-size: clamp(2.5rem,6vw,4.5rem); font-weight: 900; line-height: 1.2; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 1s 0.2s forwards; color: var(--primary-dark); }
     .hero p { font-size: 1.3rem; color: var(--text-muted); margin-bottom: 3rem; opacity: 0; animation: fadeUp 1s 0.4s forwards; max-width: 700px; line-height: 1.8; }
 
-    /* Video Placeholder */
+    /* Video */
     .video-section { width: 100%; max-width: 900px; margin: 0 auto 2rem; opacity: 0; animation: fadeUp 1s 0.6s forwards; }
     .video-wrapper { position: relative; width: 100%; aspect-ratio: 16/9; background: linear-gradient(145deg,#1c211c,#2C352C); border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.2),0 15px 30px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.06); cursor: pointer; transition: transform 0.4s ease,box-shadow 0.4s ease; }
     .video-wrapper:hover { transform: translateY(-4px); box-shadow: 0 60px 120px rgba(0,0,0,0.25),0 20px 40px rgba(0,0,0,0.12); }
@@ -91,13 +123,28 @@
     .feature-row.reversed .phone-frame-feat { transform: rotateY(15deg) rotateX(5deg); }
     @media (hover: hover) { .feature-visual:hover .phone-frame-feat { transform: rotateY(0) rotateX(0) scale(1.02); } }
 
+    /* ── FOOTER ── */
     footer { background: var(--primary-dark); color: #fff; padding: 5rem 2rem; text-align: center; border-radius: 60px 60px 0 0; }
+
+    /* Footer subscribe block */
+    .footer-subscribe { margin: 2rem auto 3rem; max-width: 480px; }
+    .footer-subscribe-label { font-size: 1rem; opacity: 0.75; margin-bottom: 1rem; font-weight: 500; }
+    .footer-subscribe-row { display: flex; gap: 0; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.18); border-radius: 50px; overflow: hidden; transition: border-color 0.3s, box-shadow 0.3s; }
+    .footer-subscribe-row:focus-within { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(197,160,101,0.15); }
+    .footer-subscribe-row input { flex: 1; background: transparent; border: none; outline: none; padding: 0.9rem 1.4rem; font-family: 'Tajawal', sans-serif; font-size: 0.95rem; color: #fff; direction: rtl; }
+    .footer-subscribe-row input::placeholder { color: rgba(255,255,255,0.4); }
+    .footer-subscribe-row button { padding: 0.9rem 1.6rem; background: var(--accent); border: none; color: #2C352C; font-family: 'Tajawal', sans-serif; font-size: 0.9rem; font-weight: 800; cursor: pointer; transition: background 0.3s; white-space: nowrap; border-radius: 0 50px 50px 0; }
+    .footer-subscribe-row button:hover { background: #d4b07a; }
+
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
     @media (max-width: 1024px) {
-      nav { padding: 0.8rem 1.5rem; }
-      .nav-btn { padding: 0.6rem 1.2rem; font-size: 0.85rem; }
-      .hero { padding: 8rem 1.5rem 3rem; }
+      nav { padding: 0.8rem 1rem; gap: 0.5rem; flex-wrap: wrap; }
+      .nav-actions { gap: 0.5rem; }
+      .nav-subscribe-pill input { width: 130px; font-size: 0.8rem; }
+      .nav-subscribe-btn { padding: 0.6rem 0.9rem; font-size: 0.8rem; }
+      .nav-btn { padding: 0.6rem 1rem; font-size: 0.8rem; }
+      .hero { padding: 9rem 1.5rem 3rem; }
       .hero-main-logo { height: 80px; }
       .hero h1 { font-size: 2.5rem; }
       .video-wrapper { border-radius: 16px; }
@@ -114,30 +161,41 @@
       .feature-visual .ui-tag { top:auto !important; left:auto !important; right:auto !important; bottom:auto !important; }
       footer { padding: 3rem 1.5rem; }
     }
+
+    @media (max-width: 600px) {
+      .nav-subscribe-pill { display: none; } /* hide from nav on small screens — footer version is enough */
+    }
   </style>
 </head>
 <body>
   <div class="noise"></div>
   <div class="cursor"></div>
 
+  <!-- Toast -->
+  <div class="toast" id="toast"><span class="toast-icon">✓</span><span id="toast-msg">تم التسجيل بنجاح!</span></div>
+
   <nav>
     <img src="logo.png" alt="دِثار" class="nav-logo-img" onerror="this.src='https://via.placeholder.com/100/7B8C68/FFFFFF?text=Dithar'">
-    <a href="#contact" class="nav-btn hover-target">تواصل معنا</a>
+    <div class="nav-actions">
+      <!-- Subscribe pill -->
+      <div class="nav-subscribe-pill hover-target">
+        <input type="email" id="nav-email" placeholder="بريدك الإلكتروني" />
+        <button class="nav-subscribe-btn" id="nav-sub-btn" onclick="subscribeEmail('nav-email','nav-sub-btn')">اشترك</button>
+      </div>
+      <a href="#contact" class="nav-btn hover-target">تواصل معنا</a>
+    </div>
   </nav>
 
   <section class="hero">
     <img src="logo.png" alt="Logo" class="hero-main-logo" onerror="this.style.display='none'">
-
     <div class="coming-soon-bar">
       <div class="coming-soon-badge">
         <span class="badge-dot"></span>
         <span class="badge-text">قريبًا</span>
       </div>
     </div>
-    
     <h1>حولنا الخزانة من جماد..<br>إلى مساعد <span style="color:var(--accent);position:relative;display:inline-block;">ذكي<svg style="position:absolute;bottom:-10px;left:0;width:100%;height:10px;fill:none;stroke:var(--accent);stroke-width:3;" viewBox="0 0 100 10"><path d="M0 5 Q 50 10 100 5"></path></svg></span></h1>
     <p>يسعى دِثار لتحويل إدارة الملابس إلى تجربة رقمية ذكية. بدمج تقنيات تتبع القطع والتعرف على الصور لتقديم تنسيقات مخصصة تناسب نمط حياتك. كما نمكين الأشخاص ذوي الإعاقة البصرية عبر أوصاف صوتية دقيقة، تضمن لهم الاستقلالية في تنظيم مظهرهم، لتكون الأناقة والسهولة رفيقين دائمين لكل مستخدم</p>
-
     <div class="video-section">
       <div class="video-wrapper">
         <video id="demo" controls width="100%" height="100%" style="display:block;width:100%;height:100%;object-fit:cover;">
@@ -176,7 +234,6 @@
         <div class="phone-frame-feat"><div class="phone-notch"></div><img src="showCategory.png" class="phone-screen" alt="Organized"></div>
       </div>
     </div>
-
     <div class="feature-row reversed scroll-trigger">
       <div class="feature-text">
         <span class="feature-num">02</span>
@@ -188,7 +245,6 @@
         <div class="phone-frame-feat"><div class="phone-notch"></div><img src="Wradrobe.png" class="phone-screen" alt="Tracking Screen"></div>
       </div>
     </div>
-
     <div class="feature-row scroll-trigger">
       <div class="feature-text">
         <span class="feature-num">03</span>
@@ -200,7 +256,6 @@
         <div class="phone-frame-feat"><div class="phone-notch"></div><img src="Audio.png" class="phone-screen" alt="Accessibility"></div>
       </div>
     </div>
-
     <div class="feature-row reversed scroll-trigger">
       <div class="feature-text">
         <span class="feature-num">04</span>
@@ -217,17 +272,97 @@
   <footer id="contact">
     <img src="logo.png" style="height:60px;filter:brightness(0) invert(1);margin-bottom:1rem;" alt="Logo" onerror="this.style.display='none'">
     <p style="opacity:0.8;margin-bottom:2rem;">دِثار أناقة تُدار بذكاء.</p>
+
     <div style="margin-top:1rem;">
-      <a href="/cdn-cgi/l/email-protection#593d302d31382b77292b36333c3a2d193e34383035773a3634662a2c3b333c3a2d6481fe81ea81f380d881ea81fe81e87c6b6981e080df7c6b6981f381ee81f180d380db7c6b6981f680c981f281fe81e8" class="hover-target" style="color:rgba(255,255,255,0.7);text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;font-size:0.9rem;transition:color 0.3s;">
+      <a href="/cdn-cgi/l/email-protection#debab7aab6bfacf0aeacb1b4bbbdaa9eb9b3bfb7b2f0bdb1b3" class="hover-target" style="color:rgba(255,255,255,0.7);text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;font-size:0.9rem;transition:color 0.3s;">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
-        <span style="font-family:sans-serif;letter-spacing:0.5px;"><span class="__cf_email__" data-cfemail="b3d7dac7dbd2c19dc3c1dcd9d6d0c7f3d4ded2dadf9dd0dcde">[email&#160;protected]</span></span>
+        <span style="font-family:sans-serif;letter-spacing:0.5px;"><span class="__cf_email__" data-cfemail="d7b3bea3bfb6a5f9a7a5b8bdb2b4a397b0bab6bebbf9b4b8ba">[email&#160;protected]</span></span>
       </a>
     </div>
     <p style="margin-top:4rem;font-size:0.8rem;opacity:0.5;">© 2026 دِثار.</p>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-    const cursor = document.querySelector('.cursor');
+  <!-- ======================================================= -->
+  <!--  🔴 STEP 2: Replace these Firebase values with your own  -->
+  <!--  Get them from: Firebase Console → Project Settings →   -->
+  <!--  Your apps → Web app → SDK setup and config             -->
+  <!-- ======================================================= -->
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey:            "AIzaSyDvME4oo-rUB_8r8P3hPAGvMMJa8RtX484",
+      authDomain:        "dithar427-97d7e.firebaseapp.com",
+      projectId:         "dithar427-97d7e",
+      storageBucket:     "dithar427-97d7e.firebasestorage.app",
+      messagingSenderId: "952144252748",
+      appId:             "1:952144252748:web:9139d531dbe946df9e49e9",
+      measurementId:     "G-5MP7M0R7BF"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    function showToast(msg, isError = false) {
+      const toast   = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-msg');
+      toastMsg.textContent = msg;
+      toast.classList.toggle('error', isError);
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    window.subscribeEmail = async function(inputId, btnId) {
+      const input = document.getElementById(inputId);
+      const btn   = document.getElementById(btnId);
+      const email = input.value.trim();
+
+      // Basic validation
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showToast('يرجى إدخال بريد إلكتروني صحيح', true);
+        return;
+      }
+
+      btn.classList.add('loading');
+      btn.textContent = '...';
+
+      try {
+        await addDoc(collection(db, "subscribers"), {
+          email:       email,
+          subscribedAt: serverTimestamp()
+        });
+
+        // Track in Google Analytics
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'subscribe', { method: inputId === 'nav-email' ? 'navbar' : 'footer' });
+        }
+
+        showToast('✓ تم التسجيل بنجاح!');
+        input.value = '';
+
+      } catch (err) {
+        console.error(err);
+        showToast('حدث خطأ، يرجى المحاولة لاحقًا', true);
+      } finally {
+        btn.classList.remove('loading');
+        btn.textContent = inputId === 'nav-email' ? 'اشترك' : 'اشترك الآن';
+      }
+    };
+
+    // Allow pressing Enter in input fields
+    ['nav-email','footer-email'].forEach(id => {
+      document.getElementById(id)?.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          const btnId = id === 'nav-email' ? 'nav-sub-btn' : 'footer-sub-btn';
+          window.subscribeEmail(id, btnId);
+        }
+      });
+    });
+  </script>
+
+  <script>
+    const cursor    = document.querySelector('.cursor');
     const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     if (isDesktop) {
       document.addEventListener('mousemove', e => { cursor.style.left = e.clientX+'px'; cursor.style.top = e.clientY+'px'; });
