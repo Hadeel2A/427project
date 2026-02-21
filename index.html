@@ -32,89 +32,155 @@
     .cursor.hovered { transform: translate(-50%,-50%) scale(4); opacity: 0.2; background: var(--accent); }
     @media (hover: hover) and (pointer: fine) { .cursor { display: block; } }
 
-    /* ── NAV ── */
-    nav { position: fixed; top: 0; width: 100%; padding: 1rem 3rem; display: flex; justify-content: space-between; align-items: center; z-index: 100; background: rgba(249,247,243,0.8); backdrop-filter: blur(15px); }
+    /* ════════════════════════════
+       DESKTOP NAV
+    ════════════════════════════ */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(249,247,243,0.8); backdrop-filter: blur(15px);
+    }
+    /* Desktop row */
+    .nav-desktop {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 3rem;
+    }
     .nav-logo-img { height: 45px; width: auto; }
-
-    /* Nav right side: contact + subscribe together */
+    .nav-left { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-sep { width: 4px; height: 4px; border-radius: 50%; background: rgba(123,140,104,0.35); flex-shrink: 0; }
+    .nav-links { display: flex; align-items: center; gap: 0.2rem; }
+    .nav-link {
+      padding: 0.5rem 1rem; color: var(--text-muted); text-decoration: none;
+      font-size: 0.9rem; font-weight: 600; border-radius: 50px;
+      transition: color 0.25s, background 0.25s; white-space: nowrap; position: relative;
+    }
+    .nav-link::after {
+      content: ''; position: absolute; bottom: 4px; right: 1rem; left: 1rem;
+      height: 2px; background: var(--accent); border-radius: 2px;
+      transform: scaleX(0); transition: transform 0.25s ease;
+    }
+    .nav-link:hover { color: var(--primary-dark); background: rgba(123,140,104,0.08); }
+    .nav-link:hover::after { transform: scaleX(1); }
     .nav-actions { display: flex; align-items: center; gap: 0.8rem; }
-
-    /* ── FIX 1: Subscribe pill — button must stretch full height ── */
     .nav-subscribe-pill {
-      display: flex;
-      align-items: stretch;          /* ← was center; stretch makes button fill pill height */
-      gap: 0;
-      background: #fff;
-      border: 1.5px solid rgba(123,140,104,0.35);
-      border-radius: 50px;
-      overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-      transition: box-shadow 0.3s, border-color 0.3s;
+      display: flex; align-items: stretch; background: #fff;
+      border: 1.5px solid rgba(123,140,104,0.35); border-radius: 50px; overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: box-shadow 0.3s, border-color 0.3s;
     }
     .nav-subscribe-pill:focus-within { border-color: var(--accent); box-shadow: 0 2px 18px rgba(197,160,101,0.25); }
     .nav-subscribe-pill input {
-      border: none; outline: none; background: transparent;
-      padding: 0.65rem 1rem;
-      font-family: 'Tajawal', sans-serif; font-size: 0.85rem;
-      color: var(--text-main); width: 200px; direction: rtl;
+      border: none; outline: none; background: transparent; padding: 0.65rem 1rem;
+      font-family: 'Tajawal', sans-serif; font-size: 0.85rem; color: var(--text-main);
+      width: 200px; direction: rtl;
     }
     .nav-subscribe-pill input::placeholder { color: var(--text-muted); }
     .nav-subscribe-btn {
-      padding: 0 1.2rem;             /* ← vertical padding removed; height comes from stretch */
-      background: var(--primary-dark);
-      color: white;
-      border: none;
-      border-radius: 0 50px 50px 0;
-      font-family: 'Tajawal', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 0;                 /* let flex-stretch control height */
+      padding: 0 1.2rem; background: var(--primary-dark); color: white; border: none;
+      border-radius: 0 50px 50px 0; font-family: 'Tajawal', sans-serif;
+      font-size: 0.85rem; font-weight: 700; cursor: pointer;
+      transition: background 0.3s; white-space: nowrap;
+      display: flex; align-items: center; justify-content: center;
     }
     .nav-subscribe-btn:hover { background: var(--accent); }
     .nav-subscribe-btn.loading { opacity: 0.7; pointer-events: none; }
-
-    .nav-btn { padding: 0.8rem 2rem; background: var(--text-main); color: white; border-radius: 50px; font-weight: 700; text-decoration: none; transition: 0.3s; white-space: nowrap; }
+    .nav-btn {
+      padding: 0.8rem 2rem; background: var(--text-main); color: white;
+      border-radius: 50px; font-weight: 700; text-decoration: none;
+      transition: 0.3s; white-space: nowrap;
+    }
     .nav-btn:hover { background: var(--primary); transform: translateY(-3px); }
 
-    /* ── FIX 2: Toast — centered on screen, safe-area aware ── */
-    .toast {
+    /* ════════════════════════════
+       MOBILE NAV
+    ════════════════════════════ */
+    /* Hidden on desktop, shown on mobile */
+    .nav-mobile { display: none; flex-direction: column; }
+
+    /* Row 1: logo + hamburger */
+    .nav-mobile-top {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.85rem 1.2rem;
+    }
+
+    /* Row 2: subscribe pill full-width */
+    .nav-mobile-subscribe {
+      padding: 0 1.2rem 0.85rem;
+    }
+    .nav-mobile-subscribe .pill {
+      display: flex; align-items: stretch; background: #fff;
+      border: 1.5px solid rgba(123,140,104,0.35); border-radius: 50px; overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06); transition: border-color 0.3s;
+    }
+    .nav-mobile-subscribe .pill:focus-within { border-color: var(--accent); }
+    .nav-mobile-subscribe input {
+      flex: 1; border: none; outline: none; background: transparent;
+      padding: 0.7rem 1rem; font-family: 'Tajawal', sans-serif;
+      font-size: 0.88rem; color: var(--text-main); direction: rtl;
+    }
+    .nav-mobile-subscribe input::placeholder { color: var(--text-muted); }
+    .nav-mobile-subscribe button {
+      padding: 0 1.2rem; background: var(--primary-dark); color: white;
+      border: none; border-radius: 0 50px 50px 0;
+      font-family: 'Tajawal', sans-serif; font-size: 0.85rem; font-weight: 700;
+      cursor: pointer; transition: background 0.3s; white-space: nowrap;
+      display: flex; align-items: center;
+    }
+    .nav-mobile-subscribe button:hover { background: var(--accent); }
+
+    /* Hamburger button */
+    .hamburger {
+      display: flex; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer;
+      padding: 6px; border-radius: 8px; transition: background 0.2s;
+    }
+    .hamburger:hover { background: rgba(123,140,104,0.1); }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--text-main); border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Slide-down drawer: links only */
+    .mobile-drawer {
       position: fixed;
-      /* Center horizontally */
-      left: 50%;
-      transform: translateX(-50%) translateY(60px);
-      opacity: 0;
-      /* Place it well above the bottom safe area so it's never clipped */
-      bottom: calc(env(safe-area-inset-bottom, 0px) + 5rem);
-      background: var(--primary-dark);
-      color: white;
-      padding: 1rem 2rem;
-      border-radius: 50px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      z-index: 99999;
+      left: 0; right: 0;
+      background: rgba(249,247,243,0.98); backdrop-filter: blur(20px);
+      z-index: 98;
+      padding: 0.5rem 1.2rem 1rem;
+      display: flex; flex-direction: column; gap: 0.2rem;
+      transform: translateY(-110%);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    }
+    .mobile-drawer.open { transform: translateY(0); }
+    .mobile-drawer a {
+      padding: 0.9rem 1rem; color: var(--text-main); text-decoration: none;
+      font-size: 1.05rem; font-weight: 600; border-radius: 12px;
+      transition: background 0.2s, color 0.2s; display: block;
+    }
+    .mobile-drawer a:hover { background: rgba(123,140,104,0.1); color: var(--primary-dark); }
+
+    /* ════════════════════════════
+       TOAST
+    ════════════════════════════ */
+    .toast {
+      position: fixed; left: 50%; transform: translateX(-50%) translateY(60px);
+      opacity: 0; bottom: calc(env(safe-area-inset-bottom, 0px) + 5rem);
+      background: var(--primary-dark); color: white; padding: 1rem 2rem;
+      border-radius: 50px; font-size: 0.95rem; font-weight: 600; z-index: 99999;
       transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      pointer-events: none;
-      white-space: nowrap;
-      max-width: calc(100vw - 3rem);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25); display: flex; align-items: center;
+      gap: 0.6rem; pointer-events: none; white-space: nowrap; max-width: calc(100vw - 3rem);
     }
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
-    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
     .toast.error { background: #9B4444; }
     .toast-icon { font-size: 1.1rem; }
 
-    /* Coming Soon Badge */
+    /* ════════════════════════════
+       COMING SOON
+    ════════════════════════════ */
     .coming-soon-bar { display: flex; align-items: center; justify-content: center; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 1s 0.05s forwards; }
     .coming-soon-badge { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.55rem 1.4rem; background: linear-gradient(135deg,rgba(197,160,101,0.12),rgba(197,160,101,0.06)); border: 1.5px solid rgba(197,160,101,0.45); border-radius: 50px; position: relative; overflow: hidden; }
     .coming-soon-badge::before { content: ''; position: absolute; inset: 0; background: linear-gradient(100deg,transparent 30%,rgba(255,255,255,0.55) 50%,transparent 70%); transform: translateX(-120%); animation: shimmer 2.8s ease-in-out infinite; }
@@ -123,37 +189,33 @@
     @keyframes pulse-dot { 0% { box-shadow: 0 0 0 0 rgba(197,160,101,0.6); } 70% { box-shadow: 0 0 0 8px rgba(197,160,101,0); } 100% { box-shadow: 0 0 0 0 rgba(197,160,101,0); } }
     .badge-text { font-size: 0.9rem; font-weight: 700; letter-spacing: 0.08em; color: #9A7040; position: relative; }
 
-    /* Hero */
+    /* ════════════════════════════
+       HERO
+    ════════════════════════════ */
     .hero { padding: 9rem 2rem 4rem; text-align: center; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; }
     .hero-main-logo { height: 100px; margin-bottom: 2rem; opacity: 0; animation: fadeUp 1s forwards; }
     .hero h1 { font-size: clamp(2.5rem,6vw,4.5rem); font-weight: 900; line-height: 1.2; margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 1s 0.2s forwards; color: var(--primary-dark); }
     .hero p { font-size: 1.3rem; color: var(--text-muted); margin-bottom: 3rem; opacity: 0; animation: fadeUp 1s 0.4s forwards; max-width: 700px; line-height: 1.8; }
 
-    /* Video */
+    /* ════════════════════════════
+       VIDEO
+    ════════════════════════════ */
     .video-section { width: 100%; max-width: 900px; margin: 0 auto 2rem; opacity: 0; animation: fadeUp 1s 0.6s forwards; }
-    .video-wrapper { position: relative; width: 100%; aspect-ratio: 16/9; background: linear-gradient(145deg,#1c211c,#2C352C); border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.2),0 15px 30px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.06); cursor: pointer; transition: transform 0.4s ease,box-shadow 0.4s ease; }
+    .video-wrapper { position: relative; width: 100%; aspect-ratio: 16/9; background: linear-gradient(145deg,#1c211c,#2C352C); border-radius: 24px; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.2),0 15px 30px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.06); transition: transform 0.4s ease,box-shadow 0.4s ease; }
     .video-wrapper:hover { transform: translateY(-4px); box-shadow: 0 60px 120px rgba(0,0,0,0.25),0 20px 40px rgba(0,0,0,0.12); }
-    .video-wrapper::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 15% 85%,rgba(123,140,104,0.2) 0%,transparent 50%),radial-gradient(ellipse at 85% 15%,rgba(197,160,101,0.12) 0%,transparent 50%); z-index: 1; }
-    .video-grid { position: absolute; inset: 0; z-index: 1; background-image: linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px); background-size: 60px 60px; }
-    .video-content { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.4rem; }
-    .play-btn { width: 76px; height: 76px; border-radius: 50%; background: rgba(255,255,255,0.07); border: 2px solid rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(12px); transition: all 0.3s ease; position: relative; }
-    .play-btn::before { content: ''; position: absolute; inset: -8px; border-radius: 50%; border: 1.5px solid rgba(197,160,101,0.35); animation: ring-pulse 2.5s ease-out infinite; }
-    .play-btn::after { content: ''; position: absolute; inset: -18px; border-radius: 50%; border: 1px solid rgba(197,160,101,0.15); animation: ring-pulse 2.5s ease-out 0.6s infinite; }
-    @keyframes ring-pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
-    .play-btn svg { width: 28px; height: 28px; fill: rgba(255,255,255,0.88); transform: translateX(2px); }
-    .video-wrapper:hover .play-btn { background: rgba(197,160,101,0.22); border-color: rgba(197,160,101,0.55); transform: scale(1.1); }
-    .video-label { font-size: 1.05rem; font-weight: 600; color: rgba(255,255,255,0.45); letter-spacing: 0.03em; }
-    .video-chip { position: absolute; bottom: 1.2rem; right: 1.2rem; z-index: 4; display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.38rem 0.9rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; backdrop-filter: blur(8px); font-size: 0.72rem; color: rgba(255,255,255,0.38); font-weight: 500; }
-    .video-chip-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); opacity: 0.7; }
-    .video-meta { display: flex; align-items: center; justify-content: center; gap: 0.6rem; margin-top: 1rem; font-size: 0.78rem; color: var(--text-muted); opacity: 0.55; }
-    .video-meta-line { width: 28px; height: 1px; background: var(--accent); opacity: 0.45; }
 
+    /* ════════════════════════════
+       PHONE COMMON
+    ════════════════════════════ */
     .phone-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 25px; background: #111; border-radius: 0 0 20px 20px; z-index: 3; }
     .phone-screen { width: 100%; height: 100%; object-fit: cover; }
     .ui-tag { position: absolute; padding: 0.8rem 1.2rem; background: var(--glass); backdrop-filter: blur(10px); border-radius: 15px; box-shadow: 0 15px 30px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 0.8rem; font-weight: 700; font-size: 0.9rem; z-index: 4; animation: float 6s infinite ease-in-out; }
     .ui-icon { width: 30px; height: 30px; background: var(--bg-main); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
     @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
+    /* ════════════════════════════
+       PHILOSOPHY
+    ════════════════════════════ */
     .philosophy { padding: 6rem 2rem; background: #fff; margin: 4rem auto; max-width: 1400px; border-radius: 40px; text-align: center; }
     .sec-title { font-size: 2.5rem; color: var(--primary-dark); margin-bottom: 2rem; font-weight: 800; }
     .philo-text-box { max-width: 800px; margin: 0 auto 4rem; position: relative; }
@@ -164,6 +226,9 @@
     .philo-item:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
     .philo-item img { height: 70px; margin-bottom: 1rem; object-fit: contain; }
 
+    /* ════════════════════════════
+       WALKTHROUGH
+    ════════════════════════════ */
     .walkthrough { padding: 4rem 2rem; max-width: 1300px; margin: 0 auto; }
     .feature-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10rem; gap: 4rem; }
     .feature-row.reversed { flex-direction: row-reverse; }
@@ -173,83 +238,163 @@
     .feature-text h2 { font-size: 2.8rem; margin-bottom: 1.5rem; color: var(--primary-dark); }
     .feature-text p { font-size: 1.2rem; color: var(--text-muted); line-height: 1.8; }
     .feature-visual { flex: 1; position: relative; display: flex; justify-content: center; }
-    .phone-frame-feat { width: 260px; height: 540px; background: #111; border-radius: 40px; border: 8px solid #2d2d2d; position: relative; overflow: hidden; box-shadow: var(--shadow-phone); transform: rotateY(-15deg) rotateX(5deg); transition: 0.5s; }
+
+    .phone-frame-feat {
+      width: 260px; height: 540px; background: #111; border-radius: 40px;
+      border: 8px solid #2d2d2d; position: relative; overflow: hidden;
+      box-shadow: var(--shadow-phone);
+      transform: rotateY(-15deg) rotateX(5deg);
+      transition: transform 0.5s;
+    }
     .feature-row.reversed .phone-frame-feat { transform: rotateY(15deg) rotateX(5deg); }
-    @media (hover: hover) { .feature-visual:hover .phone-frame-feat { transform: rotateY(0) rotateX(0) scale(1.02); } }
+    @media (hover: hover) {
+      .feature-visual:hover .phone-frame-feat,
+      .feat02-wrap:hover .phone-frame-feat { transform: rotateY(0) rotateX(0) scale(1.02); }
+    }
 
-    /* ── FOOTER ── */
+    /* ════════════════════════════
+       FEATURE 02 — device on RIGHT
+       Row is .reversed so the visual
+       block is on the LEFT of the page.
+       Inside the wrap: [phone][device→]
+    ════════════════════════════ */
+    .feat02-wrap {
+      position: relative;
+      width: 390px;
+      height: 560px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start; /* phone on the left of the wrap */
+    }
+    .feat02-wrap .phone-frame-feat {
+      flex-shrink: 0;
+      /* tilt inherited from .feature-row.reversed */
+    }
+    /* Device absolutely positioned to the RIGHT of the phone */
+    .feat02-device {
+      position: absolute;
+      right: 150px;
+      bottom: 30px;
+      width: 155px;
+      height: auto;
+      z-index: 3;
+      transform: rotate(10deg);
+      filter: drop-shadow(0 24px 40px rgba(0,0,0,0.28));
+      animation: float-device 6s ease-in-out infinite;
+      transition: transform 0.5s ease;
+    }
+    @keyframes float-device {
+      0%,100% { transform: rotate(10deg) translateY(0); }
+      50%      { transform: rotate(10deg) translateY(-12px); }
+    }
+    .feat02-wrap:hover .feat02-device {
+      transform: rotate(5deg) translateY(-4px);
+    }
+
+    /* ════════════════════════════
+       FOOTER
+    ════════════════════════════ */
     footer { background: var(--primary-dark); color: #fff; padding: 5rem 2rem; text-align: center; border-radius: 60px 60px 0 0; }
-
-    /* Footer subscribe block */
-    .footer-subscribe { margin: 2rem auto 3rem; max-width: 480px; }
-    .footer-subscribe-label { font-size: 1rem; opacity: 0.75; margin-bottom: 1rem; font-weight: 500; }
-    .footer-subscribe-row { display: flex; gap: 0; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.18); border-radius: 50px; overflow: hidden; transition: border-color 0.3s, box-shadow 0.3s; }
-    .footer-subscribe-row:focus-within { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(197,160,101,0.15); }
-    .footer-subscribe-row input { flex: 1; background: transparent; border: none; outline: none; padding: 0.9rem 1.4rem; font-family: 'Tajawal', sans-serif; font-size: 0.95rem; color: #fff; direction: rtl; }
-    .footer-subscribe-row input::placeholder { color: rgba(255,255,255,0.4); }
-    .footer-subscribe-row button { padding: 0.9rem 1.6rem; background: var(--accent); border: none; color: #2C352C; font-family: 'Tajawal', sans-serif; font-size: 0.9rem; font-weight: 800; cursor: pointer; transition: background 0.3s; white-space: nowrap; border-radius: 0 50px 50px 0; }
-    .footer-subscribe-row button:hover { background: #d4b07a; }
 
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
+    /* ════════════════════════════
+       TABLET  ≤ 1024px
+    ════════════════════════════ */
     @media (max-width: 1024px) {
-      nav { padding: 0.8rem 1rem; gap: 0.5rem; flex-wrap: wrap; }
-      .nav-actions { gap: 0.5rem; }
-      .nav-subscribe-pill input { width: 130px; font-size: 0.8rem; }
-      .nav-subscribe-btn { padding: 0 0.9rem; font-size: 0.8rem; }
-      .nav-btn { padding: 0.6rem 1rem; font-size: 0.8rem; }
+      .nav-desktop { padding: 0.8rem 1.5rem; }
+      .nav-subscribe-pill input { width: 140px; }
+      .nav-btn { padding: 0.65rem 1.2rem; font-size: 0.85rem; }
       .hero { padding: 9rem 1.5rem 3rem; }
       .hero-main-logo { height: 80px; }
       .hero h1 { font-size: 2.5rem; }
-      .video-wrapper { border-radius: 16px; }
-      .play-btn { width: 58px; height: 58px; }
-      .play-btn svg { width: 22px; height: 22px; }
-      .video-chip { bottom: 0.7rem; right: 0.7rem; }
       .philo-grid { grid-template-columns: repeat(2,1fr); gap: 1rem; }
       .philosophy { padding: 3rem 1.5rem; margin: 2rem auto; }
       .walkthrough { padding: 2rem 1.5rem; }
       .feature-row,.feature-row.reversed { flex-direction: column; text-align: center; gap: 3rem; margin-bottom: 6rem; }
-      .feature-visual { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
-      .phone-frame,.phone-frame-feat { width: 260px; height: 520px; transform: none !important; order: 1; margin: 0 auto; }
-      .ui-tag { position: static !important; display: inline-flex; transform: none !important; animation: none !important; margin: 0; order: 2; width: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
-      .feature-visual .ui-tag { top:auto !important; left:auto !important; right:auto !important; bottom:auto !important; }
+      .feature-visual { flex-direction: column; align-items: center; gap: 1.5rem; }
+      .phone-frame-feat { width: 250px; height: 510px; transform: none !important; order: 1; margin: 0 auto; }
+      .ui-tag { position: static !important; display: inline-flex; transform: none !important; animation: none !important; margin: 0; order: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
+      .feat02-wrap { width: 350px; height: 530px; order: 1; }
+      .feat02-device { width: 130px; right: 0; bottom: 20px; }
       footer { padding: 3rem 1.5rem; }
     }
 
-    @media (max-width: 600px) {
-      nav { flex-wrap: wrap; padding: 0.8rem 1rem; gap: 0.5rem; }
-      .nav-actions { width: 100%; justify-content: space-between; }
-      .nav-subscribe-pill { flex: 1; margin-left: 0.5rem; }
-      .nav-subscribe-pill input { width: 100%; font-size: 0.8rem; }
-      /* Toast on mobile: sit above keyboard / thumb zone safely */
+    /* ════════════════════════════
+       MOBILE  ≤ 700px
+    ════════════════════════════ */
+    @media (max-width: 700px) {
+      /* Swap nav layouts */
+      .nav-desktop { display: none; }
+      .nav-mobile  { display: flex; }
+
+      .hero { padding: 12rem 1.2rem 2.5rem; }
+      .hero p { font-size: 1.1rem; }
+
       .toast {
         bottom: calc(env(safe-area-inset-bottom, 0px) + 6rem);
-        font-size: 0.88rem;
-        padding: 0.85rem 1.4rem;
+        font-size: 0.88rem; padding: 0.85rem 1.4rem;
       }
+
+      .feat02-wrap { width: 300px; height: 490px; }
+      .feat02-device { width: 110px; bottom: 15px; }
     }
   </style>
 </head>
 <body>
   <div class="noise"></div>
   <div class="cursor"></div>
-
-  <!-- Toast -->
   <div class="toast" id="toast"><span class="toast-icon">✓</span><span id="toast-msg">تم التسجيل بنجاح!</span></div>
 
-  <nav>
-    <img src="logo.png" alt="دِثار" class="nav-logo-img" onerror="this.src='https://via.placeholder.com/100/7B8C68/FFFFFF?text=Dithar'">
-    <div class="nav-actions">
-      <!-- Subscribe pill -->
-      <div class="nav-subscribe-pill hover-target">
-        <input type="email" id="nav-email" placeholder="بريدك الإلكتروني" />
-        <button class="nav-subscribe-btn" id="nav-sub-btn" onclick="subscribeEmail('nav-email','nav-sub-btn')">اشترك</button>
+  <!-- Mobile slide-down drawer (links only) -->
+  <div class="mobile-drawer" id="mobileDrawer">
+    <a href="#hero-section" onclick="closeDrawer()">عن دِثار</a>
+    <a href="#feature-01" onclick="closeDrawer()">ميزاتنا</a>
+    <a href="#contact" onclick="closeDrawer()">تواصل معنا</a>
+  </div>
+
+  <!-- ══ NAV ══ -->
+  <nav id="mainNav">
+
+    <!-- ── Desktop row ── -->
+    <div class="nav-desktop">
+      <div class="nav-left">
+        <img src="logo.png" alt="دِثار" class="nav-logo-img" onerror="this.src='https://via.placeholder.com/100/7B8C68/FFFFFF?text=Dithar'">
+        <span class="nav-sep"></span>
+        <div class="nav-links">
+          <a href="#hero-section" class="nav-link hover-target">عن دِثار</a>
+          <a href="#feature-01" class="nav-link hover-target">ميزاتنا</a>
+        </div>
       </div>
-      <a href="#contact" class="nav-btn hover-target">تواصل معنا</a>
+      <div class="nav-actions">
+        <div class="nav-subscribe-pill hover-target">
+          <input type="email" id="nav-email" placeholder="بريدك الإلكتروني" />
+          <button class="nav-subscribe-btn" id="nav-sub-btn" onclick="subscribeEmail('nav-email','nav-sub-btn')">اشترك</button>
+        </div>
+        <a href="#contact" class="nav-btn hover-target">تواصل معنا</a>
+      </div>
     </div>
+
+    <!-- ── Mobile: logo + hamburger row, then subscribe strip ── -->
+    <div class="nav-mobile">
+      <div class="nav-mobile-top">
+        <img src="logo.png" alt="دِثار" class="nav-logo-img" onerror="this.src='https://via.placeholder.com/100/7B8C68/FFFFFF?text=Dithar'">
+        <button class="hamburger" id="hamburger" onclick="toggleDrawer()" aria-label="القائمة">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="nav-mobile-subscribe">
+        <div class="pill">
+          <input type="email" id="mobile-email" placeholder="بريدك الإلكتروني" />
+          <button id="mobile-sub-btn" onclick="subscribeEmail('mobile-email','mobile-sub-btn')">اشترك</button>
+        </div>
+      </div>
+    </div>
+
   </nav>
 
-  <section class="hero">
+  <!-- ══ HERO ══ -->
+  <section class="hero" id="hero-section">
     <img src="logo.png" alt="Logo" class="hero-main-logo" onerror="this.style.display='none'">
     <div class="coming-soon-bar">
       <div class="coming-soon-badge">
@@ -261,19 +406,22 @@
     <p>يسعى دِثار لتحويل إدارة الملابس إلى تجربة رقمية ذكية. بدمج تقنيات تتبع القطع والتعرف على الصور لتقديم تنسيقات مخصصة تناسب نمط حياتك. كما نمكن الأشخاص ذوي الإعاقة البصرية عبر أوصاف صوتية دقيقة، تضمن لهم الاستقلالية في تنظيم مظهرهم، لتكون الأناقة والسهولة رفيقين دائمين لكل مستخدم</p>
     <div class="video-section">
       <div class="video-wrapper">
-        <video id="demo" controls width="100%" height="100%" style="display:block;width:100%;height:100%;object-fit:cover;">
-          <source src="demo.mp4" type="video/mp4">
+        <video id="demo" controls width="100%" height="100%"
+          style="display:block;width:100%;height:100%;object-fit:cover;position:relative;z-index:5;"
+          poster="video-cover.jpg">
+          <source src="Demo.mp4" type="video/mp4">
         </video>
       </div>
     </div>
   </section>
 
+  <!-- ══ PHILOSOPHY ══ -->
   <section class="philosophy hover-target">
     <h2 class="sec-title">فلسفة الشعار</h2>
     <div class="philo-text-box">
       <p class="philo-quote">
-        يستمدّ شعار دِثار جذوره من المعنى العربي ما يتدثّر به الإنسان من ثياب أو غطاء. 
-        وقد تُرجِم هذا المعنى إلى شكل بصري مستوحى من انحناءات علّاقة الملابس، 
+        يستمدّ شعار دِثار جذوره من المعنى العربي ما يتدثّر به الإنسان من ثياب أو غطاء.
+        وقد تُرجِم هذا المعنى إلى شكل بصري مستوحى من انحناءات علّاقة الملابس،
         ليعكس جوهر الفكرة في تقديم نظام ذكي يُعيد تنظيم الثياب والتعرّف عليها بسهولة.
       </p>
     </div>
@@ -285,8 +433,11 @@
     </div>
   </section>
 
+  <!-- ══ WALKTHROUGH ══ -->
   <section class="walkthrough">
-    <div class="feature-row scroll-trigger">
+
+    <!-- 01 -->
+    <div class="feature-row scroll-trigger" id="feature-01">
       <div class="feature-text">
         <span class="feature-num">01</span>
         <h2>كل ملابسك مرتّبة في مكان واحد</h2>
@@ -297,17 +448,28 @@
         <div class="phone-frame-feat"><div class="phone-notch"></div><img src="showCategory.png" class="phone-screen" alt="Organized"></div>
       </div>
     </div>
+
+    <!-- 02 — device.png to the RIGHT of phone -->
     <div class="feature-row reversed scroll-trigger">
       <div class="feature-text">
         <span class="feature-num">02</span>
         <h2>تتبّع لحظي لمكان القطعة</h2>
-        <p>يحدد مباشرة هل القطعة داخل الدولاب أو خارجـه (باستخدام القارئ الذكي)، ويعرض آخر مرة تم استخدامها لتتبع الاستخدام بسهولة.</p>
+        <p>يحدّد موقع القطعة لحظيًا داخل الخزانة أو خارجها عبر القارئ الذكي، ويعرض سجل استخدامها وآخر مرة تم ارتداؤها.</p>
       </div>
       <div class="feature-visual">
-        <div class="ui-tag" style="top:40%;left:-30px;"><div class="ui-icon">📡</div><span>تحديث مباشر</span></div>
-        <div class="phone-frame-feat"><div class="phone-notch"></div><img src="Wradrobe.png" class="phone-screen" alt="Tracking Screen"></div>
+        <div class="ui-tag" style="top:10%;right:-30px;"><div class="ui-icon">📡</div><span>تحديث مباشر</span></div>
+        <div class="feat02-wrap">
+          <div class="phone-frame-feat">
+            <div class="phone-notch"></div>
+            <img src="Wradrobe.png" class="phone-screen" alt="Tracking Screen">
+          </div>
+          <img src="device.png" class="feat02-device" alt="RFID Reader"
+               onerror="this.style.display='none'">
+        </div>
       </div>
     </div>
+
+    <!-- 03 -->
     <div class="feature-row scroll-trigger">
       <div class="feature-text">
         <span class="feature-num">03</span>
@@ -319,6 +481,8 @@
         <div class="phone-frame-feat"><div class="phone-notch"></div><img src="Audio.png" class="phone-screen" alt="Accessibility"></div>
       </div>
     </div>
+
+    <!-- 04 -->
     <div class="feature-row reversed scroll-trigger">
       <div class="feature-text">
         <span class="feature-num">04</span>
@@ -330,108 +494,109 @@
         <div class="phone-frame-feat"><div class="phone-notch"></div><img src="recommender.jpg" class="phone-screen" alt="Styling"></div>
       </div>
     </div>
+
   </section>
 
+  <!-- ══ FOOTER ══ -->
   <footer id="contact">
     <img src="logo.png" style="height:60px;filter:brightness(0) invert(1);margin-bottom:1rem;" alt="Logo" onerror="this.style.display='none'">
     <p style="opacity:0.8;margin-bottom:2rem;">دِثار أناقة تُدار بذكاء.</p>
     <div style="margin-top:1rem;">
-        <a href="mailto:dithar.project@gmail.com" class="hover-target" style="color:rgba(255,255,255,0.7);text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;font-size:0.9rem;transition:color 0.3s;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
-            <span style="font-family:sans-serif;letter-spacing:0.5px;">dithar.project@gmail.com</span>
-        </a>
+      <a href="mailto:dithar.project@gmail.com" class="hover-target"
+         style="color:rgba(255,255,255,0.7);text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;font-size:0.9rem;transition:color 0.3s;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+        <span style="font-family:sans-serif;letter-spacing:0.5px;">dithar.project@gmail.com</span>
+      </a>
     </div>
     <p style="margin-top:4rem;font-size:0.8rem;opacity:0.5;">© 2026 دِثار.</p>
-</footer>
+  </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
     const firebaseConfig = {
-      apiKey:            "AIzaSyDvME4oo-rUB_8r8P3hPAGvMMJa8RtX484",
-      authDomain:        "dithar427-97d7e.firebaseapp.com",
-      projectId:         "dithar427-97d7e",
-      storageBucket:     "dithar427-97d7e.firebasestorage.app",
+      apiKey: "AIzaSyDvME4oo-rUB_8r8P3hPAGvMMJa8RtX484",
+      authDomain: "dithar427-97d7e.firebaseapp.com",
+      projectId: "dithar427-97d7e",
+      storageBucket: "dithar427-97d7e.firebasestorage.app",
       messagingSenderId: "952144252748",
-      appId:             "1:952144252748:web:9139d531dbe946df9e49e9",
-      measurementId:     "G-5MP7M0R7BF"
+      appId: "1:952144252748:web:9139d531dbe946df9e49e9",
+      measurementId: "G-5MP7M0R7BF"
     };
-
     const app = initializeApp(firebaseConfig);
     const db  = getFirestore(app);
-
     function showToast(msg, isError = false) {
-      const toast   = document.getElementById('toast');
-      const toastMsg = document.getElementById('toast-msg');
-      toastMsg.textContent = msg;
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
       toast.classList.toggle('error', isError);
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), 3500);
     }
-
     window.subscribeEmail = async function(inputId, btnId) {
       const input = document.getElementById(inputId);
       const btn   = document.getElementById(btnId);
       const email = input.value.trim();
-
-      // Basic validation
       if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        showToast('يرجى إدخال بريد إلكتروني صحيح', true);
-        return;
+        showToast('يرجى إدخال بريد إلكتروني صحيح', true); return;
       }
-
-      btn.classList.add('loading');
-      btn.textContent = '...';
-
+      btn.classList.add('loading'); btn.textContent = '...';
       try {
-        await addDoc(collection(db, "subscribers"), {
-          email:       email,
-          subscribedAt: serverTimestamp()
-        });
-
-        // Track in Google Analytics
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'subscribe', { method: inputId === 'nav-email' ? 'navbar' : 'footer' });
-        }
-
+        await addDoc(collection(db, "subscribers"), { email, subscribedAt: serverTimestamp() });
+        if (typeof gtag !== 'undefined') gtag('event', 'subscribe', { method: inputId });
         showToast('✓ تم التسجيل بنجاح! سنتواصل معك قريبًا');
         input.value = '';
-
       } catch (err) {
         console.error(err);
         showToast('حدث خطأ، يرجى المحاولة لاحقًا', true);
       } finally {
         btn.classList.remove('loading');
-        btn.textContent = inputId === 'nav-email' ? 'اشترك' : 'اشترك الآن';
+        btn.textContent = 'اشترك';
       }
     };
-
-    // Allow pressing Enter in input fields
-    ['nav-email','footer-email'].forEach(id => {
+    ['nav-email','mobile-email'].forEach(id => {
       document.getElementById(id)?.addEventListener('keydown', e => {
         if (e.key === 'Enter') {
-          const btnId = id === 'nav-email' ? 'nav-sub-btn' : 'footer-sub-btn';
-          window.subscribeEmail(id, btnId);
+          window.subscribeEmail(id, id === 'nav-email' ? 'nav-sub-btn' : 'mobile-sub-btn');
         }
       });
     });
   </script>
 
   <script>
-    const cursor    = document.querySelector('.cursor');
-    const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (isDesktop) {
+    /* cursor */
+    const cursor = document.querySelector('.cursor');
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
       document.addEventListener('mousemove', e => { cursor.style.left = e.clientX+'px'; cursor.style.top = e.clientY+'px'; });
       document.querySelectorAll('.hover-target, a, button').forEach(t => {
         t.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
         t.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
       });
     }
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => { if (entry.isIntersecting) entry.target.querySelector('.feature-text').classList.add('visible'); });
+    /* scroll reveal */
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.querySelector('.feature-text').classList.add('visible'); });
     }, { threshold: 0.2 });
-    document.querySelectorAll('.scroll-trigger').forEach(el => observer.observe(el));
+    document.querySelectorAll('.scroll-trigger').forEach(el => obs.observe(el));
+
+    /* mobile drawer */
+    function updateDrawerTop() {
+      document.getElementById('mobileDrawer').style.top = document.getElementById('mainNav').offsetHeight + 'px';
+    }
+    function toggleDrawer() {
+      updateDrawerTop();
+      const open = document.getElementById('mobileDrawer').classList.toggle('open');
+      document.getElementById('hamburger').classList.toggle('open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    }
+    function closeDrawer() {
+      document.getElementById('mobileDrawer').classList.remove('open');
+      document.getElementById('hamburger').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    window.addEventListener('resize', () => {
+      if (document.getElementById('mobileDrawer').classList.contains('open')) updateDrawerTop();
+    });
   </script>
 </body>
 </html>
